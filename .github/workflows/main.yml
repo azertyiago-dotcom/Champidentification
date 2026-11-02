@@ -1,0 +1,44 @@
+name: Build APK - Guide Champignons
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout du code
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 3. Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
+
+      - name: 4. Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: 5. Préparation des assets
+        run: |
+          mkdir -p src/main/assets
+          cp index.html src/main/assets/index.html
+
+      - name: 6. Compilation de l'APK
+        run: gradle assembleDebug --no-daemon --stacktrace
+
+      - name: 7. Upload de l'APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Guide-Champignons-APK
+          path: build/outputs/apk/debug/*.apk
+          retention-days: 30
