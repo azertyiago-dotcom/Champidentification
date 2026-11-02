@@ -458,30 +458,4 @@ function render() {
   el.innerHTML = observations.slice().reverse().map(o => {
     const traits = [
       o.couleurChapeau && ('Chapeau : ' + esc(o.couleurChapeau)),
-      o.formeChapeau && ('Forme : ' + esc(o.formeChapeau)),
-      o.dessous && ('Dessous : ' + esc(o.dessous)),
-      o.anneau && ('Anneau : ' + esc(o.anneau)),
-      o.volve && ('Volve : ' + esc(o.volve)),
-      o.odeur && ('Odeur : ' + esc(o.odeur)),
-      o.cassure && ('Cassure : ' + esc(o.cassure))
-    ].filter(Boolean).join(' • ');
-    const photosCount = Object.values(o.photos || {}).filter(Boolean).length;
-    return `<div class="entry">
-      <strong>${esc(o.date)}</strong> — ${esc(o.lieu || 'Lieu non précisé')}<br>
-      ${traits || '<em>Caractéristiques non renseignées</em>'}<br>
-      ${o.notes ? '📝 ' + esc(o.notes) + '<br>' : ''}
-      📸 ${photosCount}/3 photos
-    </div>`;
-  }).join('');
-}
-
-// ---------- Quiz ----------
-const QUIZ_QUESTIONS = [
-  {
-    question: "Quelle espèce est MORTELLE et ressemble à la girolle ?",
-    choices: ["La girolle (Cantharellus cibarius)", "La galère marginée (Galerina marginata)", "Le cèpe de Bordeaux", "La rose des prés"],
-    answer: 1,
-    explication: "La galère marginée est mortelle et pousse sur bois ; elle peut être confondue avec des espèces comestibles."
-  },
-  {
-    question: "Quel
+      o.formeChapeau && ('Forme : ' + esc(o.forme
