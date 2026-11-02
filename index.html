@@ -452,6 +452,176 @@ function render() {
       o.couleurChapeau && ('Chapeau : ' + esc(o.couleurChapeau)),
       o.formeChapeau && ('Forme : ' + esc(o.formeChapeau)),
       o.dessous && ('Dessous : ' + esc(o.dessous)),
-      o.anneau && ('Anneau : ' + esc(o.anneau)),
+      o.anneau && ('Anneau : ' + esc(o.anneau)),      o.odeur && ('Odeur : ' + esc(o.odeur)),
+      o.cassure && ('Cassure : ' + esc(o.cassure))
+    ].filter(Boolean);
+
+    const nbPhotos = [o.photos?.chapeau, o.photos?.pied, o.photos?.dessous].filter(Boolean).length;
+    const photosHtml = nbPhotos > 0
+      ? '<div style="margin-top:6px; display:flex; gap:4px;">' +
+          ['chapeau','pied','dessous'].map(t =>
+            o.photos?.[t]
+              ? '<img src="' + o.photos[t] + '" style="width:60px;height:60px;object-fit:cover;border-radius:4px;border:1px solid #3a5a3a;">'
+              : ''
+          ).join('') +
+        '</div>'
+      : '';
+
+    return '<div class="entry">' +
+      '<strong>' + esc(o.date) + '</strong>' +
+      (o.lieu ? ' — ' + esc(o.lieu) : '') +
+      (traits.length ? '<div style="margin-top:4px;">' + traits.join(' · ') + '</div>' : '') +
+      (o.notes ? '<div style="margin-top:4px; font-style:italic; color:#a8c4a8;">« ' + esc(o.notes) + ' »</div>' : '') +
+      photosHtml +
+      '</div>';
+  }).join('');
+}
+
+// ---------- Quiz ----------
+const QUIZ_QUESTIONS = [
+  {
+    question: "Vous trouvez un champignon à chapeau brun, lamelles blanches, anneau sur le pied et volve en sac à la base. Que faites-vous ?",
+    choices: [
+      "Je le cueille : c'est un rosé des prés",
+      "Je le laisse : anneau + volve + lamelles blanches = suspicion d'amanite mortelle",
+      "Je le goûte sur la langue pour vérifier",
+      "Je le prends pour le montrer à un ami"
+    ],
+    correct: 1,
+    feedback: "Anneau + volve + lamelles blanches est la combinaison classique des amanites mortelles (phalloïde, vireuse). On ne cueille pas, on ne goûte pas."
+  },
+  {
+    question: "Un champignon jaunit vivement à la base du pied et sent l'encre. De quoi s'agit-il probablement ?",
+    choices: [
+      "D'un rosé des prés, excellent comestible",
+      "D'un agaric jaunissant, toxique",
+      "D'une girolle",
+      "D'un cèpe de Bordeaux"
+    ],
+    correct: 1,
+    feedback: "L'agaric jaunissant (Agaricus xanthodermus) jaunit à la base et sent l'encre/phénol. C'est l'espèce toxique la plus fréquemment confondue avec les rosés des prés en France."
+  },
+  {
+    question: "Quelle est la règle absolue avant de consommer un champignon cueilli ?",
+    choices: [
+      "Le laver soigneusement à l'eau vinaigrée",
+      "Le faire cuire très longtemps",
+      "Le faire valider par un mycologue ou une pharmacie mycologique",
+      "Vérifier sur une application smartphone"
+    ],
+    correct: 2,
+    feedback: "Ni le lavage, ni la cuisson prolongée, ni les applications ne neutralisent les toxines (ex : gyromitre, amanite phalloïde). Seule la validation par un mycologue est fiable."
+  },
+  {
+    question: "Une « fausse morille » (gyromitre) peut-elle devenir comestible après séchage ou cuisson prolongée ?",
+    choices: [
+      "Oui, si on la fait bien sécher",
+      "Oui, si on la fait bouillir 30 minutes",
+      "Non, le risque d'intoxication persiste",
+      "Oui, mais seulement en petite quantité"
+    ],
+    correct: 2,
+    feedback: "La gyromitrine résiste au séchage et à la cuisson. Le gyromitre reste toxique même préparé — l'intoxication peut être mortelle."
+  },
+  {
+    question: "Vous trouvez un champignon en touffes sur une souche, à lamelles jaune-verdâtre et saveur très amère. Que faire ?",
+    choices: [
+      "Le cuisiner : c'est un armillaire comestible",
+      "Le laisser : suspicion d'hypholome en touffes, toxique",
+      "Le goûter cru pour confirmer l'amertume",
+      "Le donner à un animal pour tester"
+    ],
+    correct: 1,
+    feedback: "L'hypholome en touffes (Hypholoma fasciculare) est toxique et amer. Ne jamais tester sur soi-même ni sur un animal. Confusion possible avec l'armillaire comestible."
+  },
+  {
+    question: "Un champignon blanc pousse dans une prairie, sans anneau ni volve, avec une odeur douce. Quel est le réflexe ?",
+    choices: [
+      "C'est forcément comestible : prairie + blanc + odeur douce",
+      "Je le cueille et je le mangerai après cuisson",
+      "Méfiance : les clitocybes blancs (toxiques) poussent aussi en prairie — faire vérifier",
+      "Je le jette immédiatement, c'est forcément mortel"
+    ],
+    correct: 2,
+    feedback: "Le clitocybe blanc (Clitocybe rivulosa/dealbata), toxique (syndrome muscarinien), pousse en prairie et ressemble au mousseron. Aucun critère isolé ne suffit : faire vérifier."
+  }
+];
+
+let quizAnswers = {};   // { index: choixSelectionne }
+let quizDone = {};      // { index: true }
+
+function renderQuiz() {
+  const list = document.getElementById('quiz-list');
+  if (!list) return;
+  list.innerHTML = QUIZ_QUESTIONS.map((q, i) => {
+    const answered = quizDone[i];
+    const selected = quizAnswers[i];
+    const choicesHtml = q.choices.map((c, j) => {
+      let cls = 'quiz-choice';
+      if (answered) {
+        if (j === q.correct) cls += ' correct';
+        else if (j === selected) cls += ' wrong';
+      }
+      const disabled = answered ? ' disabled' : '';
+      const onclick = answered ? '' : ' onclick="answerQuiz(' + i + ',' + j + ')"';
+      return '<button class="' + cls + '"' + disabled + onclick + '>' + esc(c) + '</button>';
+    }).join('');
+    return '<div class="quiz-card">' +
+      '<h3>' + (i + 1) + '. ' + esc(q.question) + '</h3>' +
+      choicesHtml +
+      (answered ? '<div class="quiz-feedback">💡 ' + esc(q.feedback) + '</div>' : '') +
+      '</div>';
+  }).join('');
+}
+
+function answerQuiz(qIndex, choiceIndex) {
+  if (quizDone[qIndex]) return;
+  quizAnswers[qIndex] = choiceIndex;
+  quizDone[qIndex] = true;
+  renderQuiz();
+  updateQuizScore();
+}
+
+function updateQuizScore() {
+  const el = document.getElementById('quiz-score');
+  if (!el) return;
+  const answeredCount = Object.keys(quizDone).length;
+  let good = 0;
+  for (const k in quizDone) {
+    if (quizAnswers[k] === QUIZ_QUESTIONS[k].correct) good++;
+  }
+  el.textContent = 'Score : ' + good + ' / ' + QUIZ_QUESTIONS.length +
+    (answeredCount < QUIZ_QUESTIONS.length ? ' (' + answeredCount + ' répondue' + (answeredCount > 1 ? 's' : '') + ')' : ' — terminé !');
+}
+
+function toggleQuiz() {
+  const content = document.getElementById('quiz-content');
+  const btn = document.getElementById('btn-quiz');
+  if (!content || !btn) return;
+  const isHidden = content.classList.contains('hidden');
+  if (isHidden) {
+    content.classList.remove('hidden');
+    btn.textContent = '📖 Masquer le quiz';
+    renderQuiz();
+    updateQuizScore();
+  } else {
+    content.classList.add('hidden');
+    btn.textContent = '📖 Afficher le quiz';
+  }
+}
+
+function resetQuiz() {
+  quizAnswers = {};
+  quizDone = {};
+  renderQuiz();
+  updateQuizScore();
+}
+
+// ---------- Init ----------
+render();
+</script>
+</body>
+</html>
       o.volve && ('Volve : ' + esc(o.volve)),
-      o.odeur && ('Odeur
+      
+      
