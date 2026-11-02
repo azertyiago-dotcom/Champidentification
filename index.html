@@ -35,6 +35,7 @@ button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size
 .link-box { font-size: 12px; line-height: 1.6; color: #a8c4a8; }
 .link-box a { color: #86efac; }
 .hint { font-size: 11px; color: #6b8b6b; margin-top: 4px; }
+.hidden { display: none; }
 /* Section espèces dangereuses */
 .danger-intro { font-size: 12px; color: #fca5a5; line-height: 1.5; margin-bottom: 12px; }
 .species-card { background: #1a2e1a; border-radius: 8px; padding: 12px; margin-bottom: 10px; border-left: 4px solid #dc2626; }
@@ -48,6 +49,17 @@ button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size
 .species-card .detail { font-size: 12px; line-height: 1.5; margin-top: 4px; }
 .species-card .detail strong { color: #e8f0e8; }
 .species-card .detail .label { color: #86efac; }
+/* Quiz */
+.quiz-intro { font-size: 12px; color: #a8c4a8; line-height: 1.5; margin-bottom: 12px; }
+#quiz-score { font-weight: bold; margin: 10px 0; color: #86efac; font-size: 13px; }
+.quiz-card { background: #1a2e1a; border-radius: 8px; padding: 12px; margin-bottom: 10px; border-left: 4px solid #2563eb; }
+.quiz-card h3 { font-size: 13px; color: #e8f0e8; margin-bottom: 8px; }
+.quiz-choice { display: block; width: 100%; text-align: left; padding: 9px 10px; margin: 4px 0; border: 1px solid #4a6a4a; border-radius: 6px; background: #243624; color: #e8f0e8; cursor: pointer; font-size: 13px; }
+.quiz-choice:hover { background: #2f4a2f; }
+.quiz-choice.correct { background: #14532d; border-color: #16a34a; color: #bbf7d0; }
+.quiz-choice.wrong { background: #7f1d1d; border-color: #dc2626; color: #fecaca; }
+.quiz-choice:disabled { cursor: default; opacity: 0.95; }
+.quiz-feedback { margin-top: 6px; font-size: 12px; color: #a8c4a8; line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -56,7 +68,7 @@ button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size
 
 <div class="warning">
 <strong>⚠️ AVERTISSEMENT IMPORTANT</strong><br>
-Cette application est un <strong>outil de documentation</strong>. Elle ne peut PAS identifier un champignon de manière fiable. L'ANSES recommande de <strong>ne pas se fier aux applications de reconnaissance sur smartphone</strong> en raison du risque élevé d'erreurs [citation:12]. Ne consommez JAMAIS un champignon sans validation par un mycologue ou une pharmacie mycologique.
+Cette application est un <strong>outil de documentation</strong>. Elle ne peut PAS identifier un champignon de manière fiable. L'ANSES recommande de <strong>ne pas se fier aux applications de reconnaissance sur smartphone</strong> en raison du risque élevé d'erreurs. Ne consommez JAMAIS un champignon sans validation par un mycologue ou une pharmacie mycologique.
 </div>
 
 <div class="box">
@@ -159,166 +171,170 @@ Cette application est un <strong>outil de documentation</strong>. Elle ne peut P
 <div class="box" style="border-color: #dc2626;">
   <h2 style="color: #fca5a5;">☠️ Espèces dangereuses (France)</h2>
   <div class="danger-intro">
-    Les intoxications sont principalement dues à des <strong>confusions entre espèces comestibles et toxiques</strong> [citation:12]. En 2025, le syndrome phalloïdien a été responsable de <strong>plus de 90 % des décès</strong> dus aux champignons dans le monde [citation:1]. Les espèces ci-dessous sont parmi les plus fréquemment impliquées ou les plus graves.
+    Les intoxications sont principalement dues à des <strong>confusions entre espèces comestibles et toxiques</strong>. En 2025, le syndrome phalloïdien a été responsable de <strong>plus de 90 % des décès</strong> dus aux champignons dans le monde. Les espèces ci-dessous sont parmi les plus fréquemment impliquées ou les plus graves.
   </div>
 
   <button class="btn-orange" onclick="toggleDanger()" style="margin-bottom:10px;" id="btn-danger">📖 Afficher les 15 espèces</button>
 
   <div id="danger-list" class="hidden">
 
-    <!-- 1. Amanite phalloïde -->
     <div class="species-card">
       <h3>Amanite phalloïde</h3>
       <div class="sci">Amanita phalloides</div>
       <span class="tag tag-mortel">☠️ MORTELLE</span>
       <div class="detail"><span class="label">Biotope :</span> Forêts de feuillus (chênes, hêtres), sols non trop acides. Été-automne.</div>
-      <div class="detail"><span class="label">Confusions :</span> Coulemelle, lépiotes, rosés des prés. L'ANSES cite explicitement la confusion avec la coulemelle [citation:3][citation:12].</div>
-      <div class="detail"><span class="label">Pourquoi c'est critique :</span> Responsable de <strong>87 % des syndromes phalloïdiens identifiés en 2025</strong> et de la quasi-totalité des décès [citation:1].</div>
+      <div class="detail"><span class="label">Confusions :</span> Coulemelle, lépiotes, rosés des prés.</div>
+      <div class="detail"><span class="label">Pourquoi c'est critique :</span> Responsable de <strong>87 % des syndromes phalloïdiens identifiés en 2025</strong> et de la quasi-totalité des décès.</div>
     </div>
 
-    <!-- 2. Amanite vireuse -->
     <div class="species-card">
       <h3>Amanite vireuse</h3>
       <div class="sci">Amanita virosa</div>
       <span class="tag tag-mortel">☠️ MORTELLE</span>
-      <div class="detail"><span class="label">Biotope :</span> Sous feuillus et résineux [citation:6].</div>
+      <div class="detail"><span class="label">Biotope :</span> Sous feuillus et résineux.</div>
       <div class="detail"><span class="label">Confusions :</span> Agarics comestibles, lépiotes.</div>
-      <div class="detail"><span class="label">Pourquoi c'est critique :</span> <strong>13 % des syndromes phalloïdiens</strong> identifiés en 2025 [citation:1].</div>
+      <div class="detail"><span class="label">Pourquoi c'est critique :</span> <strong>13 % des syndromes phalloïdiens</strong> identifiés en 2025.</div>
     </div>
 
-    <!-- 3. Amanite panthère -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Amanite panthère</h3>
       <div class="sci">Amanita pantherina</div>
       <span class="tag tag-toxique">⚠️ TRÈS TOXIQUE</span>
       <div class="detail"><span class="label">Biotope :</span> Forêts de feuillus et conifères, sols variés.</div>
       <div class="detail"><span class="label">Confusions :</span> Amanite rougissante (golmotte, comestible cuite), amanite épaisse.</div>
-      <div class="detail"><span class="label">Syndrome :</span> Panthérinien (convulsions, coma possible), plus grave que celui de l'amanite tue-mouches.</div>
+      <div class="detail"><span class="label">Syndrome :</span> Panthérinien (convulsions, coma possible).</div>
     </div>
 
-    <!-- 4. Amanite tue-mouches -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Amanite tue-mouches</h3>
       <div class="sci">Amanita muscaria</div>
       <span class="tag tag-toxique">⚠️ TOXIQUE</span>
       <div class="detail"><span class="label">Biotope :</span> Tous types de bois, souvent sous conifères et bouleaux.</div>
-      <div class="detail"><span class="label">Confusions :</span> Amanite des Césars (comestible), surtout après la pluie (les flocons blancs disparaissent).</div>
-      <div class="detail"><span class="label">Syndrome :</span> Panthérinien (agitation, hallucinations, somnolence), rarement mortel mais imprévisible.</div>
+      <div class="detail"><span class="label">Confusions :</span> Amanite des Césars (comestible), surtout après la pluie.</div>
+      <div class="detail"><span class="label">Syndrome :</span> Panthérinien (agitation, hallucinations, somnolence).</div>
     </div>
 
-    <!-- 5. Galère marginée -->
     <div class="species-card">
       <h3>Galère marginée</h3>
       <div class="sci">Galerina marginata</div>
       <span class="tag tag-mortel">☠️ MORTELLE</span>
-      <div class="detail"><span class="label">Biotope :</span> En groupes sur bois mort de conifères (parfois feuillus) [citation:6].</div>
-      <div class="detail"><span class="label">Confusions :</span> Pholiote changeante (Kuehneromyces mutabilis, comestible) [citation:5][citation:11].</div>
-      <div class="detail"><span class="label">Pourquoi c'est critique :</span> Toxines identiques à l'amanite phalloïde. Pousse sur bois, donc souvent cueillie par erreur avec des espèces de souche.</div>
+      <div class="detail"><span class="label">Biotope :</span> En groupes sur bois mort de conifères.</div>
+      <div class="detail"><span class="label">Confusions :</span> Pholiote changeante (comestible).</div>
+      <div class="detail"><span class="label">Pourquoi c'est critique :</span> Toxines identiques à l'amanite phalloïde. Pousse sur bois.</div>
     </div>
 
-    <!-- 6. Cortinaire couleur de rocou -->
     <div class="species-card">
       <h3>Cortinaire couleur de rocou</h3>
       <div class="sci">Cortinarius orellanus</div>
       <span class="tag tag-mortel">☠️ MORTEL</span>
       <div class="detail"><span class="label">Biotope :</span> Forêts de feuillus, notamment sous châtaigniers et chênes.</div>
-      <div class="detail"><span class="label">Syndrome :</span> Orellanien — insuffisance rénale irréversible, parfois des années après l'ingestion. L'une des intoxications les plus graves.</div>
+      <div class="detail"><span class="label">Syndrome :</span> Orellanien — insuffisance rénale irréversible, parfois des années après l'ingestion.</div>
     </div>
 
-    <!-- 7. Agaric jaunissant -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Agaric jaunissant</h3>
       <div class="sci">Agaricus xanthodermus</div>
       <span class="tag tag-toxique">⚠️ TOXIQUE</span>
-      <div class="detail"><span class="label">Biotope :</span> Prairies, parcs, jardins, bois clairs. Très commun près des habitations.</div>
-      <div class="detail"><span class="label">Confusions :</span> Rosés des prés, agarics champêtres. <strong>Signe distinctif :</strong> jaunit vivement à la base du pied quand on le frotte, odeur d'encre/iodée.</div>
-      <div class="detail"><span class="label">Pourquoi c'est critique :</span> L'espèce toxique <strong>la plus fréquemment identifiée</strong> dans les intoxications en France [citation:9].</div>
+      <div class="detail"><span class="label">Biotope :</span> Prairies, parcs, jardins, bois clairs.</div>
+      <div class="detail"><span class="label">Confusions :</span> Rosés des prés, agarics champêtres. <strong>Signe distinctif :</strong> jaunit vivement à la base du pied, odeur d'encre.</div>
+      <div class="detail"><span class="label">Pourquoi c'est critique :</span> L'espèce toxique <strong>la plus fréquemment identifiée</strong> dans les intoxications en France.</div>
     </div>
 
-    <!-- 8. Entolome livide -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Entolome livide</h3>
       <div class="sci">Entoloma sinuatum</div>
       <span class="tag tag-toxique">⚠️ TOXIQUE (grave)</span>
       <div class="detail"><span class="label">Biotope :</span> Forêts de feuillus, lisières, sols argileux.</div>
       <div class="detail"><span class="label">Confusions :</span> Rosés des prés, girolles, pieds de mouton.</div>
-      <div class="detail"><span class="label">Pourquoi c'est critique :</span> Gastro-entérites sévères. Parmi les espèces toxiques les plus fréquemment identifiées [citation:9].</div>
+      <div class="detail"><span class="label">Pourquoi c'est critique :</span> Gastro-entérites sévères.</div>
     </div>
 
-    <!-- 9. Bolet Satan -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Bolet Satan</h3>
       <div class="sci">Rubroboletus satanas</div>
       <span class="tag tag-toxique">⚠️ TOXIQUE</span>
       <div class="detail"><span class="label">Biotope :</span> Forêts de chênes, sols calcaires.</div>
       <div class="detail"><span class="label">Confusions :</span> Cèpes et bolets comestibles.</div>
-      <div class="detail"><span class="label">Pourquoi c'est critique :</span> Parmi les 5 espèces toxiques les plus fréquemment identifiées en France [citation:9].</div>
+      <div class="detail"><span class="label">Pourquoi c'est critique :</span> Parmi les 5 espèces toxiques les plus fréquemment identifiées en France.</div>
     </div>
 
-    <!-- 10. Clitocybe de l'olivier -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Clitocybe de l'olivier</h3>
       <div class="sci">Omphalotus olearius</div>
       <span class="tag tag-toxique">⚠️ TOXIQUE</span>
       <div class="detail"><span class="label">Biotope :</span> En touffes sur souches ou racines de feuillus (oliviers, chênes).</div>
-      <div class="detail"><span class="label">Confusions :</span> Girolle (Chanterelle). L'ANSES cite cette confusion parmi les <strong>plus fréquentes en 2024</strong> [citation:3][citation:12].</div>
+      <div class="detail"><span class="label">Confusions :</span> Girolle (Chanterelle). Confusion fréquente.</div>
       <div class="detail"><span class="label">Syndrome :</span> Troubles digestifs sévères, déshydratation.</div>
     </div>
 
-    <!-- 11. Paxille enroulé -->
     <div class="species-card">
       <h3>Paxille enroulé</h3>
       <div class="sci">Paxillus involutus</div>
       <span class="tag tag-mortel">☠️ MORTEL (accumulation)</span>
-      <div class="detail"><span class="label">Biotope :</span> Sous feuillus et conifères [citation:6].</div>
+      <div class="detail"><span class="label">Biotope :</span> Sous feuillus et conifères.</div>
       <div class="detail"><span class="label">Confusions :</span> Espèces comestibles de sous-bois.</div>
-      <div class="detail"><span class="label">Syndrome :</span> Poussées d'anticorps après consommations répétées, pouvant provoquer une hémolyse mortelle. Longtemps consommé à tort comme comestible.</div>
+      <div class="detail"><span class="label">Syndrome :</span> Poussées d'anticorps après consommations répétées, hémolyse possible.</div>
     </div>
 
-    <!-- 12. Gyromitre (fausse morille) -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Gyromitre (fausse morille)</h3>
       <div class="sci">Gyromitra esculenta</div>
       <span class="tag tag-toxique">⚠️ TRÈS TOXIQUE</span>
-      <div class="detail"><span class="label">Biotope :</span> Bois de conifères, avril à juin .</div>
-      <div class="detail"><span class="label">Confusions :</span> <strong>Morilles</strong> (Morchella spp.) — confusion classique et dangereuse .</div>
-      <div class="detail"><span class="label">Syndrome :</span> Gyromitrien (troubles neurologiques, hyperthermie, hépatite cytolytique). L'intoxication est possible <strong>malgré le séchage ou la cuisson prolongée</strong> .</div>
+      <div class="detail"><span class="label">Biotope :</span> Bois de conifères, avril à juin.</div>
+      <div class="detail"><span class="label">Confusions :</span> <strong>Morilles</strong> (Morchella spp.) — confusion classique et dangereuse.</div>
+      <div class="detail"><span class="label">Syndrome :</span> Gyromitrien. L'intoxication est possible <strong>malgré le séchage ou la cuisson prolongée</strong>.</div>
     </div>
 
-    <!-- 13. Hypholome en touffes -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Hypholome en touffes</h3>
       <div class="sci">Hypholoma fasciculare</div>
       <span class="tag tag-toxique">⚠️ TOXIQUE</span>
-      <div class="detail"><span class="label">Biotope :</span> En touffes sur bois mort et souches [citation:6].</div>
+      <div class="detail"><span class="label">Biotope :</span> En touffes sur bois mort et souches.</div>
       <div class="detail"><span class="label">Confusions :</span> Armillaire couleur de miel (comestible), pholiotes.</div>
       <div class="detail"><span class="label">Syndrome :</span> Gastro-intestinal sévère, saveur très amère.</div>
     </div>
 
-    <!-- 14. Tricholome tigré -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Tricholome tigré</h3>
       <div class="sci">Tricholoma pardinum</div>
       <span class="tag tag-toxique">⚠️ TOXIQUE (grave)</span>
       <div class="detail"><span class="label">Biotope :</span> Forêts de conifères et feuillus, sols calcaires.</div>
       <div class="detail"><span class="label">Confusions :</span> Tricholome équestre (comestible), autres tricholomes comestibles.</div>
-      <div class="detail"><span class="label">Syndrome :</span> Gastro-intestinal sévère (diarrhées, vomissements), parfois hospitalisation.</div>
+      <div class="detail"><span class="label">Syndrome :</span> Gastro-intestinal sévère, parfois hospitalisation.</div>
     </div>
 
-    <!-- 15. Clitocybe blanc -->
-    <div class="species-card">
+    <div class="species-card toxic">
       <h3>Clitocybe blanc</h3>
       <div class="sci">Clitocybe rivulosa / dealbata</div>
       <span class="tag tag-toxique">⚠️ TOXIQUE</span>
       <div class="detail"><span class="label">Biotope :</span> Prairies, pelouses, bords de chemin.</div>
-      <div class="detail"><span class="label">Confusions :</span> Mousseron (Marasmius oreades), clitopile petite prune (Clitopilus prunulus) [citation:5].</div>
-      <div class="detail"><span class="label">Syndrome :</span> Muscarinien (sueurs, salivation, troubles visuels, bradycardie). Peut être grave.</div>
+      <div class="detail"><span class="label">Confusions :</span> Mousseron (Marasmius oreades), clitopile petite prune.</div>
+      <div class="detail"><span class="label">Syndrome :</span> Muscarinien (sueurs, salivation, troubles visuels, bradycardie).</div>
     </div>
 
     <div class="warning" style="margin-top:12px;">
-      <strong>Rappel ANSES :</strong> « Ne pas se fier aux applications de reconnaissance sur smartphone, en raison du risque élevé d'erreurs d'identification » [citation:12]. Faites toujours contrôler votre récolte par un pharmacien ou une association de mycologie.
+      <strong>Rappel ANSES :</strong> « Ne pas se fier aux applications de reconnaissance sur smartphone, en raison du risque élevé d'erreurs d'identification ». Faites toujours contrôler votre récolte par un pharmacien ou une association de mycologie.
     </div>
 
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION QUIZ DE RECONNAISSANCE                                -->
+<!-- ============================================================ -->
+<div class="box" style="border-color: #2563eb;">
+  <h2 style="color: #93c5fd;">🧠 Quiz de reconnaissance</h2>
+  <div class="quiz-intro">
+    Entraînez-vous à distinguer les espèces comestibles des espèces toxiques.
+    Ce quiz est un outil pédagogique : il ne remplace JAMAIS la vérification par un mycologue avant consommation.
+  </div>
+
+  <button class="btn-blue" onclick="toggleQuiz()" style="margin-bottom:10px;" id="btn-quiz">📖 Afficher le quiz</button>
+
+  <div id="quiz-content" class="hidden">
+    <div id="quiz-score">Score : 0 / 0</div>
+    <div id="quiz-list"></div>
+    <button class="btn-gray" onclick="resetQuiz()" style="margin-top:6px;">🔄 Recommencer</button>
   </div>
 </div>
 
@@ -459,8 +475,13 @@ function render() {
   }).join('');
 }
 
-// Init
-render();
-</script>
-</body>
-</html>
+// ---------- Quiz ----------
+const QUIZ_QUESTIONS = [
+  {
+    question: "Quelle espèce est MORTELLE et ressemble à la girolle ?",
+    choices: ["La girolle (Cantharellus cibarius)", "La galère marginée (Galerina marginata)", "Le cèpe de Bordeaux", "La rose des prés"],
+    answer: 1,
+    explication: "La galère marginée est mortelle et pousse sur bois ; elle peut être confondue avec des espèces comestibles."
+  },
+  {
+    question: "Quel
