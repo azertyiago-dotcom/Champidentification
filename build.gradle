@@ -1,0 +1,41 @@
+buildscript {
+    repositories { google(); mavenCentral() }
+    dependencies { classpath 'com.android.tools.build:gradle:8.5.2' }
+}
+
+allprojects {
+    repositories { google(); mavenCentral() }
+}
+
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.monentreprise.champignons'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.monentreprise.champignons"
+        minSdk 23
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            assets.srcDirs = ['src/main/assets']
+            res.srcDirs = ['src/main/res']
+        }
+    }
+
+    androidResources { noCompress 'html', 'js', 'css' }
+}
+
+dependencies { }
