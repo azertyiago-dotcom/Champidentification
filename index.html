@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Guide Champignons</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+body { background: #1a2e1a; color: #e8f0e8; padding: 15px; padding-bottom: 40px; }
+h1 { font-size: 20px; letter-spacing: 3px; color: #86efac; text-align: center; margin-bottom: 15px; text-transform: uppercase; }
+.box { background: #243624; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #3a5a3a; }
+h2 { font-size: 13px; color: #86efac; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #3a5a3a; padding-bottom: 6px; }
+label { display: block; font-size: 12px; font-weight: bold; margin: 8px 0 4px; color: #a8c4a8; }
+input, select, textarea { width: 100%; padding: 10px; border: 1px solid #4a6a4a; border-radius: 6px; font-size: 14px; background: #1a2e1a; color: #e8f0e8; font-family: inherit; }
+textarea { min-height: 60px; resize: vertical; }
+button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 8px; }
+.btn-green { background: #16a34a; color: white; }
+.btn-blue { background: #2563eb; color: white; }
+.btn-gray { background: #3a5a3a; color: #e8f0e8; }
+.btn-red { background: #7f1d1d; color: #fca5a5; }
+.photo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.photo-item { text-align: center; }
+.photo-item label { font-size: 10px; margin: 4px 0; }
+.photo-item input[type="file"] { display: none; }
+.photo-btn { display: block; padding: 25px 5px; background: #1a2e1a; border: 2px dashed #4a6a4a; border-radius: 8px; cursor: pointer; font-size: 11px; color: #86efac; }
+.photo-btn.has-img { border-style: solid; border-color: #16a34a; padding: 0; }
+.photo-btn img { width: 100%; height: 70px; object-fit: cover; border-radius: 6px; }
+.checkbox-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; }
+.checkbox-row input[type="checkbox"] { width: auto; }
+.entry { background: #1a2e1a; padding: 10px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #16a34a; font-size: 12px; }
+.entry strong { color: #86efac; }
+.warning { background: #7f1d1d; color: #fca5a5; padding: 12px; border-radius: 8px; font-size: 12px; line-height: 1.5; margin-bottom: 15px; }
+.warning strong { color: #fef2f2; }
+.link-box { font-size: 12px; line-height: 1.6; color: #a8c4a8; }
+.link-box a { color: #86efac; }
+.hint { font-size: 11px; color: #6b8b6b; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<h1>🍄 Guide Champignons</h1>
+
+<div class="warning">
+<strong>⚠️ AVERTISSEMENT IMPORTANT</strong><br>
+Cette application est un <strong>outil de documentation</strong>. Elle ne peut PAS identifier un champignon de manière fiable. Ne consommez JAMAIS un champignon sur la base d'une application. Consultez toujours un mycologue qualifié ou une pharmacie mycologique.
+</div>
+
+<div class="box">
+  <h2>📸 Photos (3 angles)</h2>
+  <div class="photo-grid">
+    <div class="photo-item">
+      <label>Chapeau</label>
+      <input type="file" id="photo-chapeau" accept="image/*" capture="environment" onchange="loadPhoto(this, 'chapeau')">
+      <label for="photo-chapeau" class="photo-btn" id="btn-chapeau">📷<br>Ajouter</label>
+    </div>
+    <div class="photo-item">
+      <label>Pied</label>
+      <input type="file" id="photo-pied" accept="image/*" capture="environment" onchange="loadPhoto(this, 'pied')">
+      <label for="photo-pied" class="photo-btn" id="btn-pied">📷<br>Ajouter</label>
+    </div>
+    <div class="photo-item">
+      <label>Dessous</label>
+      <input type="file" id="photo-dessous" accept="image/*" capture="environment" onchange="loadPhoto(this, 'dessous')">
+      <label for="photo-dessous" class="photo-btn" id="btn-dessous">📷<br>Ajouter</label>
+    </div>
+  </div>
+</div>
+
+<div class="box">
+  <h2>📝 Caractéristiques</h2>
+  <label>Lieu / Habitat</label>
+  <input type="text" id="f-lieu" placeholder="Ex: Forêt de Fontainebleau, sous chênes">
+
+  <label>Couleur du chapeau</label>
+  <select id="f-couleur-chapeau">
+    <option value="">— Choisir —</option>
+    <option>Blanc</option><option>Crème</option><option>Jaune</option>
+    <option>Orange</option><option>Rouge</option><option>Rose</option>
+    <option>Violet</option><option>Brun</option><option>Noir</option>
+    <option>Vert</option><option>Gris</option>
+  </select>
+
+  <label>Forme du chapeau</label>
+  <select id="f-forme-chapeau">
+    <option value="">— Choisir —</option>
+    <option>Convexe</option><option>Plat</option><option>Creusé (en coupe)</option>
+    <option>En cloche</option><option>Conique</option><option>Ombiliqué</option>
+  </select>
+
+  <label>Dessous du chapeau</label>
+  <select id="f-dessous">
+    <option value="">— Choisir —</option>
+    <option>Lamelles</option><option>Pores</option><option>Aiguillons</option>
+    <option>Plis</option><option>Surface lisse</option>
+  </select>
+
+  <label>Présence d'un anneau (sur le pied)</label>
+  <select id="f-anneau">
+    <option value="">— Choisir —</option>
+    <option>Oui, bien visible</option><option>Oui, fugace</option>
+    <option>Non</option><option>Incertain</option>
+  </select>
+
+  <label>Présence d'une volve (base du pied)</label>
+  <select id="f-volve">
+    <option value="">— Choisir —</option>
+    <option>Oui, membraneuse</option><option>Oui, en sac</option>
+    <option>Non</option><option>Incertain</option>
+  </select>
+
+  <label>Odeur</label>
+  <select id="f-odeur">
+    <option value="">— Choisir —</option>
+    <option>Aucune</option><option>Douce / agréable</option>
+    <option>Anis</option><option>Farine</option>
+    <option>Champignon</option><option>Fétide / désagréable</option>
+    <option>Phénol / encre</option><option>Incertaine</option>
+  </select>
+
+  <label>Changement de couleur à la cassure</label>
+  <select id="f-cassure">
+    <option value="">— Choisir —</option>
+    <option>Non</option><option>Oui, bleuissant</option>
+    <option>Oui, rougissant</option><option>Oui, noircissant</option>
+    <option>Oui, jaunissant</option><option>Incertain</option>
+  </select>
+
+  <label>Observations libres</label>
+  <textarea id="f-notes" placeholder="Autres détails : taille, environnement, arbres à proximité..."></textarea>
+</div>
+
+<div class="box">
+  <h2>✅ Checklist de sécurité</h2>
+  <div class="checkbox-row"><input type="checkbox" id="c1"><label for="c1" style="margin:0;">J'ai photographié les 3 angles</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="c2"><label for="c2" style="margin:0;">J'ai noté l'habitat (arbres, sol)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="c3"><label for="c3" style="margin:0;">J'ai vérifié odeur et cassure</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="c4"><label for="c4" style="margin:0;">Je ferai vérifier par un mycologue AVANT toute consommation</label></div>
+</div>
+
+<button class="btn-green" onclick="saveObservation()">💾 Enregistrer l'observation</button>
+
+<div class="box" style="margin-top:15px;">
+  <h2>📚 Observations enregistrées</h2>
+  <div id="liste-observations"></div>
+  <button class="btn-red" onclick="clearAll()" style="margin-top:12px; font-size:11px; padding:6px;">⚠️ Tout effacer</button>
+</div>
+
+<div class="box">
+  <h2>🔗 Ressources fiables</h2>
+  <div class="link-box">
+    • <a href="https://www.mycofrance.fr" target="_blank">Société Mycologique de France</a><br>
+    • <a href="https://www.mycofrance.fr/les-pharmacies-mycologiques/" target="_blank">Pharmacies mycologiques (liste officielle)</a><br>
+    • <a href="https://www.anses.fr/fr/content/cueillette-des-champignons" target="_blank">Recommandations ANSES</a><br>
+    • <a href="https://www.centres-antipoison.net/" target="_blank">Centres antipoison (urgence)</a>
+  </div>
+</div>
+
+<script>
+// ---------- Photos ----------
+const photos = { chapeau: null, pied: null, dessous: null };
+
+function loadPhoto(input, type) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    photos[type] = e.target.result;
+    const btn = document.getElementById('btn-' + type);
+    btn.classList.add('has-img');
+    btn.innerHTML = '<img src="' + e.target.result + '" alt="' + type + '">';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ---------- Persistance ----------
+let observations = [];
+try { observations = JSON.parse(localStorage.getItem('obs_data')) || []; } catch(e) { observations = []; }
+
+function saveObs() {
+  try { localStorage.setItem('obs_data', JSON.stringify(observations)); } catch(e) { console.warn(e); }
+}
+
+function esc(s) {
+  return String(s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// ---------- Enregistrement ----------
+function saveObservation() {
+  const obs = {
+    id: 'OBS-' + Date.now(),
+    date: new Date().toLocaleString('fr-FR'),
+    lieu: document.getElementById('f-lieu').value.trim(),
+    couleurChapeau: document.getElementById('f-couleur-chapeau').value,
+    formeChapeau: document.getElementById('f-forme-chapeau').value,
+    dessous: document.getElementById('f-dessous').value,
+    anneau: document.getElementById('f-anneau').value,
+    volve: document.getElementById('f-volve').value,
+    odeur: document.getElementById('f-odeur').value,
+    cassure: document.getElementById('f-cassure').value,
+    notes: document.getElementById('f-notes').value.trim(),
+    photos: { ...photos }
+  };
+
+  if (!obs.lieu && !obs.notes && !obs.couleurChapeau) {
+    alert('Remplissez au moins quelques caractéristiques avant d\'enregistrer.');
+    return;
+  }
+
+  observations.push(obs);
+  saveObs();
+  resetForm();
+  render();
+  alert('✅ Observation enregistrée.\n\n⚠️ Rappel : ne consommez JAMAIS un champignon sans validation par un mycologue.');
+}
+
+function resetForm() {
+  ['f-lieu','f-couleur-chapeau','f-forme-chapeau','f-dessous','f-anneau','f-volve','f-odeur','f-cassure','f-notes'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  ['c1','c2','c3','c4'].forEach(id => document.getElementById(id).checked = false);
+  ['chapeau','pied','dessous'].forEach(t => {
+    photos[t] = null;
+    const btn = document.getElementById('btn-' + t);
+    btn.classList.remove('has-img');
+    btn.innerHTML = '📷<br>Ajouter';
+  });
+}
+
+function clearAll() {
+  if (!confirm('Supprimer TOUTES les observations ?')) return;
+  if (!confirm('Vraiment sûr ? Action irréversible.')) return;
+  observations = [];
+  saveObs();
+  render();
+}
+
+// ---------- Affichage ----------
+function render() {
+  const el = document.getElementById('liste-observations');
+  if (observations.length === 0) {
+    el.innerHTML = '<div class="hint" style="text-align:center; padding:15px;">Aucune observation enregistrée.</div>';
+    return;
+  }
+  el.innerHTML = observations.slice().reverse().map(o => {
+    const traits = [
+      o.couleurChapeau && ('Chapeau : ' + esc(o.couleurChapeau)),
+      o.formeChapeau && ('Forme : ' + esc(o.formeChapeau)),
+      o.dessous && ('Dessous : ' + esc(o.dessous)),
+      o.anneau && ('Anneau : ' + esc(o.anneau)),
+      o.volve && ('Volve : ' + esc(o.volve)),
+      o.odeur && ('Odeur : ' + esc(o.odeur)),
+      o.cassure && ('Cassure : ' + esc(o.cassure))
+    ].filter(Boolean).join(' • ');
+    const photosCount = Object.values(o.photos || {}).filter(Boolean).length;
+    return `<div class="entry">
+      <strong>${esc(o.date)}</strong> — ${esc(o.lieu || 'Lieu non précisé')}<br>
+      ${traits || '<em>Caractéristiques non renseignées</em>'}<br>
+      ${o.notes ? '📝 ' + esc(o.notes) + '<br>' : ''}
+      📸 ${photosCount}/3 photos
+    </div>`;
+  }).join('');
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
