@@ -268,7 +268,7 @@ function clearAll() {
   if (!confirm('Vraiment sûr ? Action irréversible.')) return;
   observations = []; saveObs(); render();
 }
-  function render() {
+function render() {
   var el = document.getElementById('liste-observations');
   if (observations.length === 0) {
     el.innerHTML = '<div class="hint" style="text-align:center; padding:15px;">Aucune observation enregistrée.</div>';
@@ -290,38 +290,19 @@ function clearAll() {
     if (nbPhotos > 0) {
       photosHtml = '<div style="margin-top:6px; display:flex; gap:4px;">';
       var ts = ['chapeau','pied','dessous'];
-      for (var i = 0; i < ts.length; i++) {
-        var t = ts[i];
-        if (o.photos && o.photos[t]) photosHtml += '<img src="' + o.photos[t] + '" style="width:60px;height:60px;object-fit:cover;border-radius:4px;border:1px solid #3a5a3a;">';
-      }
+      for (var i = 0; i < ts.length; i++) { var t = ts[i]; if (o.photos && o.photos[t]) photosHtml += '<img src="' + o.photos[t] + '" style="width:60px;height:60px;object-fit:cover;border-radius:4px;border:1px solid #3a5a3a;">'; }
       photosHtml += '</div>';
     }
-    return '<div class="entry"><strong>' + esc(o.date) + '</strong>' +
-      (o.lieu ? ' — ' + esc(o.lieu) : '') +
-      (traits.length ? '<div style="margin-top:4px;">' + traits.join(' · ') + '</div>' : '') +
-      (o.notes ? '<div style="margin-top:4px; font-style:italic; color:#a8c4a8;">« ' + esc(o.notes) + ' »</div>' : '') +
-      photosHtml + '</div>';
+    return '<div class="entry"><strong>' + esc(o.date) + '</strong>' + (o.lieu ? ' — ' + esc(o.lieu) : '') + (traits.length ? '<div style="margin-top:4px;">' + traits.join(' · ') + '</div>' : '') + (o.notes ? '<div style="margin-top:4px; font-style:italic; color:#a8c4a8;">« ' + esc(o.notes) + ' »</div>' : '') + photosHtml + '</div>';
   }).join('');
 }
 var QUIZ_QUESTIONS = [
-  { question: "Chapeau brun + lamelles blanches + anneau + volve en sac. Que faites-vous ?",
-    choices: ["Je le cueille : c'est un rosé des prés", "Je le laisse : suspicion d'amanite mortelle", "Je le goûte pour vérifier", "Je le prends pour le montrer"],
-    correct: 1, feedback: "Cette combinaison (lamelles blanches + anneau + volve en sac) est classique des amanites mortelles." },
-  { question: "Le pied jaunit à la base quand on le froisse, odeur d'encre. De quoi s'agit-il ?",
-    choices: ["D'un rosé des prés, excellent", "D'un agaric jaunissant, toxique", "D'une girolle", "D'un cèpe de Bordeaux"],
-    correct: 1, feedback: "L'agaric jaunissant jaunit à la base et sent l'encre. C'est l'espèce toxique la plus confondue avec le rosé des prés." },
-  { question: "Quelle est la règle absolue avant de consommer ?",
-    choices: ["Laver à l'eau vinaigrée", "Cuire très longtemps", "Validation par un mycologue ou une pharmacie mycologique", "Vérifier sur une application"],
-    correct: 2, feedback: "Ni lavage, ni cuisson, ni application ne neutralisent les toxines. Seule la validation par un mycologue est fiable." },
-    { question: "Une fausse morille (gyromitre) après séchage/cuisson est-elle comestible ?",
-    choices: ["Oui, si bien séchée", "Oui, si bouillie 30 min", "Non, le risque persiste", "Oui, en petite quantité"],
-    correct: 2, feedback: "La gyromitrine résiste au séchage et à la cuisson. Le gyromitre reste toxique." },
-  { question: "Touffes sur souche, lamelles jaune-vert, saveur très amère. Que faire ?",
-    choices: ["Le cuisiner : armillaire comestible", "Le laisser : suspicion d'hypholome en touffes", "Le goûter cru", "Le donner à un animal"],
-    correct: 1, feedback: "L'hypholome en touffes est toxique et amer. Ne jamais tester sur soi ni sur un animal." },
-  { question: "Blanc en prairie, sans anneau ni volve, odeur douce. Réflexe ?",
-    choices: ["Comestible : prairie + blanc + odeur douce", "Je le mange après cuisson", "Méfiance : clitocybes blancs toxiques possibles, faire vérifier", "Je le jette, c'est mortel"],
-    correct: 2, feedback: "Le clitocybe blanc pousse en prairie et ressemble au mousseron. Aucun critère isolé ne suffit." }
+  { question: "Chapeau brun + lamelles blanches + anneau + volve en sac. Que faites-vous ?", choices: ["Je le cueille : c'est un rosé des prés", "Je le laisse : suspicion d'amanite mortelle", "Je le goûte pour vérifier", "Je le prends pour le montrer"], correct: 1, feedback: "Cette combinaison (lamelles blanches + anneau + volve en sac) est classique des amanites mortelles." },
+  { question: "Le pied jaunit à la base quand on le froisse, odeur d'encre. De quoi s'agit-il ?", choices: ["D'un rosé des prés, excellent", "D'un agaric jaunissant, toxique", "D'une girolle", "D'un cèpe de Bordeaux"], correct: 1, feedback: "L'agaric jaunissant jaunit à la base et sent l'encre. C'est l'espèce toxique la plus confondue avec le rosé des prés." },
+  { question: "Quelle est la règle absolue avant de consommer ?", choices: ["Laver à l'eau vinaigrée", "Cuire très longtemps", "Validation par un mycologue ou une pharmacie mycologique", "Vérifier sur une application"], correct: 2, feedback: "Ni lavage, ni cuisson, ni application ne neutralisent les toxines. Seule la validation par un mycologue est fiable." },
+  { question: "Une fausse morille (gyromitre) après séchage/cuisson est-elle comestible ?", choices: ["Oui, si bien séchée", "Oui, si bouillie 30 min", "Non, le risque persiste", "Oui, en petite quantité"], correct: 2, feedback: "La gyromitrine résiste au séchage et à la cuisson. Le gyromitre reste toxique." },
+  { question: "Touffes sur souche, lamelles jaune-vert, saveur très amère. Que faire ?", choices: ["Le cuisiner : armillaire comestible", "Le laisser : suspicion d'hypholome en touffes", "Le goûter cru", "Le donner à un animal"], correct: 1, feedback: "L'hypholome en touffes est toxique et amer. Ne jamais tester sur soi ni sur un animal." },
+  { question: "Blanc en prairie, sans anneau ni volve, odeur douce. Réflexe ?", choices: ["Comestible : prairie + blanc + odeur douce", "Je le mange après cuisson", "Méfiance : clitocybes blancs toxiques possibles, faire vérifier", "Je le jette, c'est mortel"], correct: 2, feedback: "Le clitocybe blanc pousse en prairie et ressemble au mousseron. Aucun critère isolé ne suffit." }
 ];
 var quizAnswers = {};
 var quizDone = {};
@@ -336,8 +317,7 @@ function renderQuiz() {
       var onclick = answered ? '' : ' onclick="answerQuiz(' + i + ',' + j + ')"';
       return '<button class="' + cls + '"' + disabled + onclick + '>' + esc(c) + '</button>';
     }).join('');
-    return '<div class="quiz-card"><h3>' + (i + 1) + '. ' + esc(q.question) + '</h3>' + choicesHtml +
-      (answered ? '<div class="quiz-feedback">💡 ' + esc(q.feedback) + '</div>' : '') + '</div>';
+    return '<div class="quiz-card"><h3>' + (i + 1) + '. ' + esc(q.question) + '</h3>' + choicesHtml + (answered ? '<div class="quiz-feedback">💡 ' + esc(q.feedback) + '</div>' : '') + '</div>';
   }).join('');
 }
 function answerQuiz(qIndex, choiceIndex) {
@@ -349,8 +329,7 @@ function updateQuizScore() {
   var el = document.getElementById('quiz-score'); if (!el) return;
   var answeredCount = Object.keys(quizDone).length; var good = 0;
   for (var k in quizDone) if (quizAnswers[k] === QUIZ_QUESTIONS[k].correct) good++;
-  el.textContent = 'Score : ' + good + ' / ' + QUIZ_QUESTIONS.length +
-    (answeredCount < QUIZ_QUESTIONS.length ? ' (' + answeredCount + ' répondue' + (answeredCount > 1 ? 's' : '') + ')' : ' — terminé !');
+  el.textContent = 'Score : ' + good + ' / ' + QUIZ_QUESTIONS.length + (answeredCount < QUIZ_QUESTIONS.length ? ' (' + answeredCount + ' répondue' + (answeredCount > 1 ? 's' : '') + ')' : ' — terminé !');
 }
 function toggleQuiz() {
   var content = document.getElementById('quiz-content');
