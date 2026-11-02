@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Guide Champignons</title>
+<title>Guide Champignons + ID</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
 body { background: #1a2e1a; color: #e8f0e8; padding: 15px; padding-bottom: 40px; }
@@ -19,6 +19,7 @@ button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size
 .btn-gray { background: #3a5a3a; color: #e8f0e8; }
 .btn-red { background: #7f1d1d; color: #fca5a5; }
 .btn-orange { background: #c2410c; color: white; }
+.btn-purple { background: #6b21a8; color: white; }
 .photo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 .photo-item { text-align: center; }
 .photo-item label { font-size: 10px; margin: 4px 0; }
@@ -58,6 +59,14 @@ button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size
 .quiz-choice.wrong { background: #7f1d1d; border-color: #dc2626; color: #fecaca; }
 .quiz-choice:disabled { cursor: default; opacity: 0.95; }
 .quiz-feedback { margin-top: 6px; font-size: 12px; color: #a8c4a8; line-height: 1.4; }
+.id-result { background: #1a2e1a; border-radius: 8px; padding: 12px; margin-top: 10px; border-left: 4px solid #6b21a8; }
+.id-result h3 { font-size: 13px; color: #c084fc; margin-bottom: 8px; }
+.id-candidate { padding: 6px 0; border-bottom: 1px solid #3a5a3a; font-size: 13px; }
+.id-candidate:last-child { border-bottom: none; }
+.id-candidate .name { color: #e8f0e8; font-weight: bold; }
+.id-candidate .prob { color: #86efac; float: right; }
+.id-candidate .warn { color: #fca5a5; font-size: 11px; margin-top: 2px; }
+.id-status { font-size: 12px; color: #a8c4a8; margin-top: 8px; font-style: italic; }
 </style>
 </head>
 <body>
@@ -66,7 +75,7 @@ button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-size
 
 <div class="warning">
 <strong>⚠️ AVERTISSEMENT IMPORTANT</strong><br>
-Cette application est un <strong>outil de documentation</strong>. Elle ne peut PAS identifier un champignon de manière fiable. L'ANSES recommande de <strong>ne pas se fier aux applications de reconnaissance sur smartphone</strong> en raison du risque élevé d'erreurs. Ne consommez JAMAIS un champignon sans validation par un mycologue ou une pharmacie mycologique.
+Cette application est un <strong>outil de documentation et d'expérimentation</strong>. La reconnaissance par IA ne peut PAS identifier un champignon de manière fiable. L'ANSES recommande de <strong>ne pas se fier aux applications de reconnaissance sur smartphone</strong> en raison du risque élevé d'erreurs. Ne consommez JAMAIS un champignon sans validation par un mycologue ou une pharmacie mycologique.
 </div>
 
 <div class="box">
@@ -88,7 +97,10 @@ Cette application est un <strong>outil de documentation</strong>. Elle ne peut P
       <label for="photo-dessous" class="photo-btn" id="btn-dessous">📷<br>Ajouter</label>
     </div>
   </div>
+  <button class="btn-purple" onclick="runInference()" id="btn-infer" style="margin-top:12px;">🧠 Reconnaître l'espèce (IA locale)</button>
+  <div id="ai-result"></div>
 </div>
+
 <div class="box">
   <h2>📝 Caractéristiques</h2>
   <label>Lieu / Habitat</label>
@@ -206,8 +218,45 @@ Cette application est un <strong>outil de documentation</strong>. Elle ne peut P
     • <a href="https://www.centres-antipoison.net/" target="_blank">Centres antipoison (urgence)</a>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite@0.0.1-alpha.10/dist/tf-tflite.min.js"></script>
 <script>
+// ==================== État global ====================
 var photos = { chapeau: null, pied: null, dessous: null };
+var tfliteModel = null;
+var labels = [];
+var modelReady = false;
+var dangerNames = [
+  "Amanita phalloides", "Amanita virosa", "Amanita pantherina", "Amanita muscaria",
+  "Galerina marginata", "Cortinarius orellanus", "Agaricus xanthodermus",
+  "Entoloma sinuatum", "Rubroboletus satanas", "Omphalotus olearius",
+  "Paxillus involutus", "Gyromitra esculenta", "Hypholoma fasciculare",
+  "Tricholoma pardinum", "Clitocybe rivulosa", "Clitocybe dealbata"
+];
+
+// ==================== Chargement du modèle TFLite ====================
+async function loadModel() {
+  try {
+    // Charger les labels
+    var lblResp = await fetch('labels.txt');
+    if (lblResp.ok) {
+      var txt = await lblResp.text();
+      labels = txt.trim().split('\n').map(function(l){ return l.trim(); });
+    }
+
+    // Charger le modèle TFLite
+    tfliteModel = await tflite.loadTFLiteModel('mushroom-model.tflite');
+    modelReady = true;
+    console.log('Modèle chargé, labels:', labels.length);
+  } catch(e) {
+    console.warn('Modèle non disponible:', e.message);
+    modelReady = false;
+  }
+}
+loadModel();
+
+// ==================== Gestion des photos ====================
 function loadPhoto(input, type) {
   var file = input.files[0]; if (!file) return;
   var reader = new FileReader();
@@ -219,6 +268,107 @@ function loadPhoto(input, type) {
   };
   reader.readAsDataURL(file);
 }
+
+// ==================== Inférence IA ====================
+async function runInference() {
+  var resultDiv = document.getElementById('ai-result');
+  var btn = document.getElementById('btn-infer');
+
+  if (!modelReady || !tfliteModel) {
+    resultDiv.innerHTML = '<div class="id-result"><h3>⚠️ Modèle non disponible</h3><div class="id-status">Placez <code>mushroom-model.tflite</code> et <code>labels.txt</code> dans le même dossier que cette page, puis rechargez. En attendant, la reconnaissance IA est désactivée.</div></div>';
+    return;
+  }
+
+  // Choisir la photo la plus pertinente (chapeau > dessous > pied)
+  var src = photos.chapeau || photos.dessous || photos.pied;
+  if (!src) {
+    resultDiv.innerHTML = '<div class="id-result"><h3>📷 Aucune photo</h3><div class="id-status">Ajoutez au moins une photo (chapeau de préférence).</div></div>';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Analyse en cours...';
+  resultDiv.innerHTML = '';
+
+  try {
+    // Préparer l'image : 224x224, normalisation [-1, 1] (standard MobileNet)
+    var img = new Image();
+    await new Promise(function(resolve, reject) {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = src;
+    });
+
+    var tensor = tf.browser.fromPixels(img)
+      .resizeBilinear([224, 224])
+      .toFloat()
+      .div(127.5)
+      .sub(1)
+      .expandDims(0);
+
+    // Inférence
+    var output = tfliteModel.predict(tensor);
+    var probs = await output.data();
+    tensor.dispose();
+    output.dispose();
+
+    // Top-3
+    var indices = Array.from(probs.keys());
+    indices.sort(function(a, b){ return probs[b] - probs[a]; });
+    var top3 = indices.slice(0, 3);
+
+    var maxProb = probs[top3[0]];
+    var html = '<div class="id-result"><h3>🧠 Résultat IA (top 3)</h3>';
+
+    top3.forEach(function(idx, rank) {
+      var name = labels[idx] || ('Classe ' + idx);
+      var prob = (probs[idx] * 100).toFixed(1);
+      var isDanger = dangerNames.some(function(d){
+        return d.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+               name.toLowerCase().indexOf(d.toLowerCase()) !== -1;
+      });
+      html += '<div class="id-candidate">';
+      html += '<span class="name">' + (rank + 1) + '. ' + name + '</span>';
+      html += '<span class="prob">' + prob + '%</span>';
+      if (isDanger) html += '<div class="warn">⚠️ Espèce potentiellement dangereuse — vérifiez les confusions</div>';
+      html += '</div>';
+    });
+
+    // Statut de confiance
+    if (maxProb < 0.4) {
+      html += '<div class="id-status">🔍 Confiance faible : le résultat est incertain. Complétez les caractéristiques manuelles ci-dessous.</div>';
+    } else if (maxProb < 0.7) {
+      html += '<div class="id-status">🟡 Confiance modérée : recoupez avec les critères manuels.</div>';
+    } else {
+      html += '<div class="id-status">🟢 Confiance relativement élevée — mais ne dispense jamais d\'une vérification par un mycologue.</div>';
+    }
+
+    // Fusion avec les champs manuels
+    var manualHints = [];
+    var volve = document.getElementById('f-volve').value;
+    var anneau = document.getElementById('f-anneau').value;
+    var odeur = document.getElementById('f-odeur').value;
+    if (volve === 'Oui, en sac') manualHints.push('Volve en sac signalée → risque Amanita élevé');
+    if (anneau.indexOf('Oui') !== -1 && volve.indexOf('Oui') !== -1) manualHints.push('Anneau + volve → suspicion d\'amanite mortelle');
+    if (odeur === 'Phénol / encre') manualHints.push('Odeur d\'encre → penser à Agaricus xanthodermus');
+    if (odeur === 'Farine') manualHints.push('Odeur de farine → possible Entoloma ou Clitocybe');
+    if (manualHints.length) {
+      html += '<div class="id-status" style="margin-top:8px; border-top:1px solid #3a5a3a; padding-top:6px;"><strong>🔗 Recoupement manuel :</strong><br>' + manualHints.join('<br>') + '</div>';
+    }
+
+    html += '<div class="id-status" style="color:#fca5a5; margin-top:8px;">⚠️ Rappel : ne consommez JAMAIS sur la base de ce résultat.</div>';
+    html += '</div>';
+    resultDiv.innerHTML = html;
+
+  } catch(e) {
+    resultDiv.innerHTML = '<div class="id-result"><h3>❌ Erreur</h3><div class="id-status">' + e.message + '</div></div>';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🧠 Reconnaître l\'espèce (IA locale)';
+  }
+}
+
+// ==================== Reste du code (identique à votre version) ====================
 var dangerOpen = false;
 function toggleDanger() {
   dangerOpen = !dangerOpen;
