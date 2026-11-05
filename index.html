@@ -17,13 +17,12 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: #86efac
 textarea { min-height: 60px; resize: vertical; }
 button { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: transform 0.1s, opacity 0.2s; user-select: none; }
 button:active { transform: scale(0.98); opacity: 0.9; }
-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 .btn-green { background: #16a34a; color: white; }
 .btn-blue { background: #2563eb; color: white; }
 .btn-gray { background: #3a5a3a; color: #e8f0e8; }
 .btn-red { background: #7f1d1d; color: #fca5a5; }
 .btn-orange { background: #c2410c; color: white; }
-.btn-purple { background: #6b21a8; color: white; }
+.btn-purple { background: #7e22ce; color: white; }
 .photo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 .photo-item { text-align: center; }
 .photo-item label { font-size: 11px; margin: 4px 0; font-weight: 600; }
@@ -49,30 +48,15 @@ button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 .tag-mortel { background: #7f1d1d; color: #fca5a5; }
 .tag-toxique { background: #7c2d12; color: #fdba74; }
 .species-card .detail { font-size: 13px; line-height: 1.5; margin-top: 6px; }
-.species-card .detail strong { color: #e8f0e8; }
-.species-card .detail .label { color: #86efac; font-weight: 600; }
-.quiz-card { background: #1a2e1a; border-radius: 8px; padding: 14px; margin-bottom: 10px; border-left: 4px solid #2563eb; }
-.quiz-card h3 { font-size: 14px; color: #e8f0e8; margin-bottom: 10px; line-height: 1.4; }
-.quiz-choice { display: block; width: 100%; text-align: left; padding: 12px; margin: 6px 0; border: 1px solid #4a6a4a; border-radius: 8px; background: #243624; color: #e8f0e8; cursor: pointer; font-size: 13px; transition: background 0.2s; }
-.quiz-choice:active { background: #2f4a2f; }
-.quiz-choice.correct { background: #14532d; border-color: #16a34a; color: #bbf7d0; }
-.quiz-choice.wrong { background: #7f1d1d; border-color: #dc2626; color: #fecaca; }
-.quiz-choice:disabled { cursor: default; opacity: 0.9; }
-.quiz-feedback { margin-top: 8px; font-size: 12px; color: #a8c4a8; line-height: 1.4; padding: 8px; background: #243624; border-radius: 6px; }
-.id-result { background: #1a2e1a; border-radius: 8px; padding: 14px; margin-top: 12px; border-left: 4px solid #6b21a8; animation: fadeIn 0.3s ease; }
+.id-result { background: #1a2e1a; border-radius: 8px; padding: 14px; margin-top: 12px; border-left: 4px solid #7e22ce; animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 .id-result h3 { font-size: 15px; color: #c084fc; margin-bottom: 10px; }
-.id-candidate { padding: 8px 0; border-bottom: 1px solid #3a5a3a; font-size: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-.id-candidate:last-child { border-bottom: none; }
-.id-candidate .name { color: #e8f0e8; font-weight: 600; }
-.id-candidate .prob { color: #86efac; font-weight: 700; font-size: 15px; }
-.id-candidate .warn { width: 100%; color: #fca5a5; font-size: 11px; margin-top: 4px; font-weight: 600; }
+.deduction-item { padding: 8px 0; border-bottom: 1px solid #3a5a3a; font-size: 14px; }
+.deduction-item:last-child { border-bottom: none; }
+.deduction-item .name { color: #e8f0e8; font-weight: 600; }
+.deduction-item .danger { color: #fca5a5; font-size: 12px; margin-top: 4px; font-weight: 600; }
+.deduction-item .safe { color: #86efac; font-size: 12px; margin-top: 4px; font-weight: 600; }
 .id-status { font-size: 12px; color: #a8c4a8; margin-top: 10px; font-style: italic; line-height: 1.4; }
-.model-status { font-size: 12px; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; line-height: 1.4; }
-.model-ok { background: #14532d; color: #bbf7d0; border: 1px solid #16a34a; }
-.model-err { background: #7f1d1d; color: #fecaca; border: 1px solid #dc2626; }
-.model-loading { background: #3a5a3a; color: #e8f0e8; border: 1px solid #4a6a4a; }
-.btn-mini { width: auto; padding: 6px 12px; font-size: 12px; margin-top: 8px; display: inline-block; }
 </style>
 </head>
 <body>
@@ -81,11 +65,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
 <div class="warning">
 <strong>⚠️ AVERTISSEMENT IMPORTANT</strong><br>
-Cette application est un <strong>outil de documentation et d'expérimentation</strong>. La reconnaissance par IA ne peut PAS identifier un champignon de manière fiable à 100%. L'ANSES recommande de <strong>ne pas se fier aux applications de reconnaissance sur smartphone</strong>. Ne consommez JAMAIS un champignon sans validation par un mycologue ou une pharmacie mycologique.
+Cette application est un <strong>outil d'aide à la détermination</strong>. Ne consommez JAMAIS un champignon sans validation formelle par un mycologue ou une pharmacie mycologique.
 </div>
 
 <div class="box">
-  <h2>📸 Photos (3 angles recommandés)</h2>
+  <h2>📸 Photos (pour montrer au pharmacien)</h2>
   <div class="photo-grid">
     <div class="photo-item">
       <label>Chapeau</label>
@@ -103,202 +87,97 @@ Cette application est un <strong>outil de documentation et d'expérimentation</s
       <label for="photo-dessous" class="photo-btn" id="btn-dessous">📷<br>Ajouter</label>
     </div>
   </div>
-  <button class="btn-purple" onclick="runInference()" id="btn-infer" style="margin-top:15px;" disabled>🧠 Reconnaître l'espèce (IA locale)</button>
-  <div id="model-status" class="model-status model-loading">⏳ Initialisation du moteur IA...</div>
-  <div id="ai-result"></div>
 </div>
 
 <div class="box">
-  <h2>📝 Caractéristiques</h2>
+  <h2>📝 Caractéristiques observées</h2>
   <label>Lieu / Habitat</label>
-  <input type="text" id="f-lieu" placeholder="Ex: Forêt de Fontainebleau, sous chênes" autocomplete="off">
-  <label>Couleur du chapeau</label>
-  <select id="f-couleur-chapeau">
-    <option value="">— Choisir —</option>
-    <option>Blanc</option><option>Crème</option><option>Jaune</option>
-    <option>Orange</option><option>Rouge</option><option>Rose</option>
-    <option>Violet</option><option>Brun</option><option>Noir</option>
-    <option>Vert</option><option>Gris</option>
-  </select>
-  <label>Forme du chapeau</label>
-  <select id="f-forme-chapeau">
-    <option value="">— Choisir —</option>
-    <option>Convexe</option><option>Plat</option><option>Creusé (en coupe)</option>
-    <option>En cloche</option><option>Conique</option><option>Ombiliqué</option>
-  </select>
-  <label>Dessous du chapeau</label>
+  <input type="text" id="f-lieu" placeholder="Ex: Sous chênes, forêt de feuillus" autocomplete="off">
+  
+  <label>Dessous du chapeau (CRITIQUE)</label>
   <select id="f-dessous">
     <option value="">— Choisir —</option>
-    <option>Lamelles</option><option>Pores</option><option>Aiguillons</option>
-    <option>Plis</option><option>Surface lisse</option>
+    <option>Lamelles</option>
+    <option>Pores (éponge)</option>
+    <option>Aiguillons</option>
+    <option>Plis (comme une girolle)</option>
+    <option>Surface lisse</option>
   </select>
+
   <label>Présence d'un anneau (sur le pied)</label>
   <select id="f-anneau">
     <option value="">— Choisir —</option>
-    <option>Oui, bien visible</option><option>Oui, fugace</option>
-    <option>Non</option><option>Incertain</option>
+    <option>Oui, bien visible</option>
+    <option>Oui, fugace (disparaît)</option>
+    <option>Non</option>
   </select>
-  <label>Présence d'une volve (base du pied)</label>
+
+  <label>Présence d'une volve (sac à la base du pied)</label>
   <select id="f-volve">
     <option value="">— Choisir —</option>
-    <option>Oui, membraneuse</option><option>Oui, en sac</option>
-    <option>Non</option><option>Incertain</option>
+    <option>Oui, en sac / membraneuse</option>
+    <option>Non</option>
+    <option>Incertain (creuser la terre)</option>
   </select>
-  <label>Odeur</label>
+
+  <label>Odeur à la cassure ou au frottement</label>
   <select id="f-odeur">
     <option value="">— Choisir —</option>
-    <option>Aucune</option><option>Douce / agréable</option>
-    <option>Anis</option><option>Farine</option>
-    <option>Champignon</option><option>Fétide / désagréable</option>
-    <option>Phénol / encre</option><option>Incertaine</option>
+    <option>Aucune / faible</option>
+    <option>Anis / amande amère</option>
+    <option>Farine de blé</option>
+    <option>Phénol / Encre / chimique</option>
+    <option>Fétide / radis</option>
   </select>
-  <label>Changement de couleur à la cassure</label>
+
+  <label>Changement de couleur à la coupure/cassure</label>
   <select id="f-cassure">
     <option value="">— Choisir —</option>
-    <option>Non</option><option>Oui, bleuissant</option>
-    <option>Oui, rougissant</option><option>Oui, noircissant</option>
-    <option>Oui, jaunissant</option><option>Incertain</option>
+    <option>Aucun changement</option>
+    <option>Bleuit fortement</option>
+    <option>Rougit / jaunit à la base du pied</option>
   </select>
+
   <label>Observations libres</label>
-  <textarea id="f-notes" placeholder="Autres détails : taille, environnement, arbres à proximité..."></textarea>
+  <textarea id="f-notes" placeholder="Autres détails : taille, couleur du chapeau, arbres à proximité..."></textarea>
+  
+  <button class="btn-purple" onclick="runExpertSystem()" style="margin-top:15px;">🧠 Lancer l'analyse mycologique</button>
+  <div id="ai-result"></div>
 </div>
 
 <div class="box">
   <h2>✅ Checklist de sécurité</h2>
   <div class="checkbox-row"><input type="checkbox" id="c1"><label for="c1" style="margin:0; font-weight:normal;">J'ai photographié les 3 angles</label></div>
-  <div class="checkbox-row"><input type="checkbox" id="c2"><label for="c2" style="margin:0; font-weight:normal;">J'ai noté l'habitat (arbres, sol)</label></div>
-  <div class="checkbox-row"><input type="checkbox" id="c3"><label for="c3" style="margin:0; font-weight:normal;">J'ai vérifié odeur et cassure</label></div>
-  <div class="checkbox-row"><input type="checkbox" id="c4"><label for="c4" style="margin:0; font-weight:normal;">Je ferai vérifier par un mycologue AVANT toute consommation</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="c2"><label for="c2" style="margin:0; font-weight:normal;">J'ai déterré le champignon pour vérifier la base (volve)</label></div>
+  <div class="checkbox-row"><input type="checkbox" id="c3"><label for="c3" style="margin:0; font-weight:normal;">Je ferai vérifier ma récolte par un expert</label></div>
 </div>
 
 <button class="btn-green" onclick="saveObservation()">💾 Enregistrer l'observation</button>
 
-<div class="box" style="border-color: #dc2626;">
-  <h2 style="color: #fca5a5;">☠️ Espèces dangereuses (France)</h2>
-  <div style="font-size: 13px; color: #fca5a5; line-height: 1.5; margin-bottom: 12px;">
-    Les intoxications sont principalement dues à des <strong>confusions entre espèces comestibles et toxiques</strong>. Les espèces ci-dessous sont parmi les plus fréquemment impliquées ou les plus graves.
-  </div>
-  <button class="btn-orange" onclick="toggleDanger()" style="margin-bottom:10px;" id="btn-danger">📖 Afficher les 15 espèces</button>
-  <div id="danger-list" class="hidden">
-    <div class="species-card"><h3>Amanite phalloïde</h3><div class="sci">Amanita phalloides</div><span class="tag tag-mortel">☠️ MORTELLE</span><div class="detail"><span class="label">Biotope :</span> Forêts de feuillus (chênes, hêtres), sols non trop acides. Été-automne.</div><div class="detail"><span class="label">Confusions :</span> Coulemelle, lépiotes, rosés des prés.</div><div class="detail"><span class="label">Pourquoi c'est critique :</span> Responsable de la quasi-totalité des décès par syndrome phalloïdien.</div></div>
-    <div class="species-card"><h3>Amanite vireuse</h3><div class="sci">Amanita virosa</div><span class="tag tag-mortel">☠️ MORTELLE</span><div class="detail"><span class="label">Biotope :</span> Sous feuillus et résineux.</div><div class="detail"><span class="label">Confusions :</span> Agarics comestibles, lépiotes.</div></div>
-    <div class="species-card toxic"><h3>Amanite panthère</h3><div class="sci">Amanita pantherina</div><span class="tag tag-toxique">⚠️ TRÈS TOXIQUE</span><div class="detail"><span class="label">Biotope :</span> Forêts de feuillus et conifères, sols variés.</div><div class="detail"><span class="label">Confusions :</span> Amanite rougissante (golmotte).</div><div class="detail"><span class="label">Syndrome :</span> Panthérinien (convulsions, coma possible).</div></div>
-    <div class="species-card toxic"><h3>Amanite tue-mouches</h3><div class="sci">Amanita muscaria</div><span class="tag tag-toxique">⚠️ TOXIQUE</span><div class="detail"><span class="label">Biotope :</span> Tous types de bois, souvent sous conifères et bouleaux.</div><div class="detail"><span class="label">Confusions :</span> Amanite des Césars (comestible).</div><div class="detail"><span class="label">Syndrome :</span> Panthérinien (agitation, hallucinations).</div></div>
-    <div class="species-card"><h3>Galère marginée</h3><div class="sci">Galerina marginata</div><span class="tag tag-mortel">☠️ MORTELLE</span><div class="detail"><span class="label">Biotope :</span> En groupes sur bois mort de conifères.</div><div class="detail"><span class="label">Confusions :</span> Pholiote changeante (comestible).</div><div class="detail"><span class="label">Pourquoi c'est critique :</span> Toxines identiques à l'amanite phalloïde. Pousse sur bois.</div></div>
-    <div class="species-card"><h3>Cortinaire couleur de rocou</h3><div class="sci">Cortinarius orellanus</div><span class="tag tag-mortel">☠️ MORTEL</span><div class="detail"><span class="label">Biotope :</span> Forêts de feuillus, notamment sous châtaigniers et chênes.</div><div class="detail"><span class="label">Syndrome :</span> Orellanien — insuffisance rénale irréversible, parfois des années après.</div></div>
-    <div class="species-card toxic"><h3>Agaric jaunissant</h3><div class="sci">Agaricus xanthodermus</div><span class="tag tag-toxique">⚠️ TOXIQUE</span><div class="detail"><span class="label">Biotope :</span> Prairies, parcs, jardins, bois clairs.</div><div class="detail"><span class="label">Confusions :</span> Rosés des prés. <strong>Signe distinctif :</strong> jaunit vivement à la base du pied, odeur d'encre.</div></div>
-    <div class="species-card toxic"><h3>Entolome livide</h3><div class="sci">Entoloma sinuatum</div><span class="tag tag-toxique">⚠️ TOXIQUE (grave)</span><div class="detail"><span class="label">Biotope :</span> Forêts de feuillus, lisières, sols argileux.</div><div class="detail"><span class="label">Confusions :</span> Rosés des prés, girolles, pieds de mouton.</div></div>
-    <div class="species-card toxic"><h3>Bolet Satan</h3><div class="sci">Rubroboletus satanas</div><span class="tag tag-toxique">⚠️ TOXIQUE</span><div class="detail"><span class="label">Biotope :</span> Forêts de chênes, sols calcaires.</div><div class="detail"><span class="label">Confusions :</span> Cèpes et bolets comestibles.</div></div>
-    <div class="species-card toxic"><h3>Clitocybe de l'olivier</h3><div class="sci">Omphalotus olearius</div><span class="tag tag-toxique">⚠️ TOXIQUE</span><div class="detail"><span class="label">Biotope :</span> En touffes sur souches ou racines de feuillus (oliviers, chênes).</div><div class="detail"><span class="label">Confusions :</span> Girolle (Chanterelle). Confusion fréquente.</div></div>
-    <div class="species-card"><h3>Paxille enroulé</h3><div class="sci">Paxillus involutus</div><span class="tag tag-mortel">☠️ MORTEL (accumulation)</span><div class="detail"><span class="label">Biotope :</span> Sous feuillus et conifères.</div><div class="detail"><span class="label">Syndrome :</span> Poussées d'anticorps après consommations répétées, hémolyse possible.</div></div>
-    <div class="species-card toxic"><h3>Gyromitre (fausse morille)</h3><div class="sci">Gyromitra esculenta</div><span class="tag tag-toxique">⚠️ TRÈS TOXIQUE</span><div class="detail"><span class="label">Biotope :</span> Bois de conifères, avril à juin.</div><div class="detail"><span class="label">Confusions :</span> <strong>Morilles</strong> (Morchella spp.). L'intoxication est possible <strong>malgré le séchage ou la cuisson</strong>.</div></div>
-    <div class="species-card toxic"><h3>Hypholome en touffes</h3><div class="sci">Hypholoma fasciculare</div><span class="tag tag-toxique">⚠️ TOXIQUE</span><div class="detail"><span class="label">Biotope :</span> En touffes sur bois mort et souches.</div><div class="detail"><span class="label">Confusions :</span> Armillaire couleur de miel (comestible).</div></div>
-    <div class="species-card toxic"><h3>Tricholome tigré</h3><div class="sci">Tricholoma pardinum</div><span class="tag tag-toxique">⚠️ TOXIQUE (grave)</span><div class="detail"><span class="label">Biotope :</span> Forêts de conifères et feuillus, sols calcaires.</div><div class="detail"><span class="label">Confusions :</span> Tricholome équestre (comestible).</div></div>
-    <div class="species-card toxic"><h3>Clitocybe blanc</h3><div class="sci">Clitocybe rivulosa / dealbata</div><span class="tag tag-toxique">⚠️ TOXIQUE</span><div class="detail"><span class="label">Biotope :</span> Prairies, pelouses, bords de chemin.</div><div class="detail"><span class="label">Confusions :</span> Mousseron (Marasmius oreades).</div><div class="detail"><span class="label">Syndrome :</span> Muscarinien (sueurs, salivation, troubles visuels).</div></div>
-    <div class="warning" style="margin-top:12px;"><strong>Rappel ANSES :</strong> « Ne pas se fier aux applications de reconnaissance sur smartphone, en raison du risque élevé d'erreurs d'identification ». Faites toujours contrôler votre récolte par un pharmacien ou une association de mycologie.</div>
-  </div>
-</div>
-
-<div class="box" style="border-color: #2563eb;">
-  <h2 style="color: #93c5fd;">🧠 Quiz de reconnaissance</h2>
-  <div style="font-size: 13px; color: #a8c4a8; line-height: 1.5; margin-bottom: 12px;">Entraînez-vous à distinguer les espèces comestibles des espèces toxiques. Ce quiz est un outil pédagogique : il ne remplace JAMAIS la vérification par un mycologue.</div>
-  <button class="btn-blue" onclick="toggleQuiz()" style="margin-bottom:10px;" id="btn-quiz">📖 Afficher le quiz</button>
-  <div id="quiz-content" class="hidden">
-    <div id="quiz-score" style="font-weight: bold; margin: 10px 0; color: #86efac; font-size: 14px;">Score : 0 / 0</div>
-    <div id="quiz-list"></div>
-    <button class="btn-gray" onclick="resetQuiz()" style="margin-top:10px;">🔄 Recommencer</button>
-  </div>
-</div>
-
 <div class="box" style="margin-top:15px;">
-  <h2>📚 Observations enregistrées</h2>
+  <h2>📚 Historique</h2>
   <div id="liste-observations"></div>
   <button class="btn-red" onclick="clearAll()" style="margin-top:12px; font-size:12px; padding:10px;">⚠️ Tout effacer</button>
 </div>
 
 <div class="box">
-  <h2>🔗 Ressources fiables</h2>
+  <h2>🔗 Urgences & Ressources</h2>
   <div class="link-box">
-    • <a href="https://www.mycofrance.fr" target="_blank">Société Mycologique de France</a><br>
-    • <a href="https://www.mycofrance.fr/les-pharmacies-mycologiques/" target="_blank">Pharmacies mycologiques (liste officielle)</a><br>
-    • <a href="https://www.anses.fr/fr/content/cueillette-des-champignons" target="_blank">Recommandations ANSES</a><br>
-    • <a href="https://www.centres-antipoison.net/" target="_blank">Centres antipoison (urgence)</a>
+    • <a href="tel:112">📞 Appeler le 112 (Urgence médicale)</a><br>
+    • <a href="https://www.centres-antipoison.net/" target="_blank">🏥 Centres antipoison (France)</a><br>
+    • <a href="https://www.mycofrance.fr/les-pharmacies-mycologiques/" target="_blank">🍄 Pharmacies mycologiques</a>
   </div>
 </div>
 
-<!-- TensorFlow.js + TFLite runtime -->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.20.0/dist/tf-core.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-cpu@4.20.0/dist/tf-backend-cpu.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-tflite@0.0.1-alpha.10/dist/tf-tflite.min.js"></script>
-
 <script>
-// ==================== Configuration ====================
-// Pour une APK Android, placez ce fichier dans : app/src/main/assets/mushroom-model.tflite
-var MODEL_PATH = 'mushroom-model.tflite';  
-var INPUT_SIZE = 299;  // EfficientNetV2 attend 299x299
-var LABELS = ['Agaricus', 'Amanita', 'Boletus', 'Cortinarius', 'Entoloma', 'Hygrocybe', 'Lactarius', 'Russula', 'Suillus'];
-var DANGER_GENERA = ['Amanita', 'Cortinarius', 'Entoloma'];
-
 // ==================== État global ====================
 var photos = { chapeau: null, pied: null, dessous: null };
-var tfliteModel = null;
-var modelReady = false;
-
-// ==================== Chargement du modèle ====================
-async function loadModel() {
-  var statusEl = document.getElementById('model-status');
-  var btn = document.getElementById('btn-infer');
-  
-  try {
-    await tf.setBackend('cpu');
-    await tf.ready();
-    
-    // Essayer plusieurs chemins possibles pour s'adapter à l'environnement Android WebView
-    const possiblePaths = [
-      MODEL_PATH,
-      './' + MODEL_PATH,
-      'file:///android_asset/' + MODEL_PATH
-    ];
-    
-    let loaded = false;
-    for (const path of possiblePaths) {
-      try {
-        console.log('Tentative de chargement IA :', path);
-        tfliteModel = await tflite.loadTFLiteModel(path, {
-          numThreads: Math.max(1, Math.floor((navigator.hardwareConcurrency || 2) / 2))
-        });
-        loaded = true;
-        console.log('✅ Modèle chargé depuis :', path);
-        break;
-      } catch (e) {
-        console.warn('Échec sur le chemin :', path, e);
-      }
-    }
-
-    if (!loaded) {
-      throw new Error("Fichier .tflite introuvable dans les chemins testés.");
-    }
-    
-    modelReady = true;
-    statusEl.className = 'model-status model-ok';
-    statusEl.textContent = '✅ Modèle IA prêt (' + LABELS.length + ' genres)';
-    btn.disabled = false;
-  } catch(e) {
-    console.error('Échec complet du chargement du modèle:', e);
-    modelReady = false;
-    statusEl.className = 'model-status model-err';
-    statusEl.innerHTML = '❌ Modèle IA non chargé.<br><small>Vérifiez que <code>mushroom-model.tflite</code> est dans le dossier <code>assets</code> de l\'APK.</small><br><button class="btn-gray btn-mini" onclick="runDemoInference()">🧪 Tester le mode démo</button>';
-    btn.disabled = false; // On laisse activé pour qu'il déclenche le mode démo
-  }
-}
+var observations = [];
 
 // ==================== Gestion des photos ====================
 function loadPhoto(input, type) {
   var file = input.files[0]; 
   if (!file) return;
-  
-  // Optimisation : utiliser FileReader pour avoir le base64 (nécessaire pour localStorage)
-  // Mais on pourrait utiliser URL.createObjectURL pour plus de rapidité si on ne sauvegarde pas
   var reader = new FileReader();
   reader.onload = function(e) {
     photos[type] = e.target.result;
@@ -309,163 +188,94 @@ function loadPhoto(input, type) {
   reader.readAsDataURL(file);
 }
 
-// ==================== Inférence ====================
-async function runInference() {
-  // Si le modèle n'est pas chargé, on lance automatiquement la démo pour montrer que l'app fonctionne
-  if (!modelReady || !tfliteModel) {
-    runDemoInference();
-    return;
-  }
-
+// ==================== MOTEUR DE DÉDUCTION MYCOLOGIQUE (Remplace l'IA TFLite) ====================
+function runExpertSystem() {
   var resultDiv = document.getElementById('ai-result');
-  var src = photos.chapeau || photos.dessous || photos.pied;
-  
-  if (!src) {
-    resultDiv.innerHTML = '<div class="id-result"><h3>📷 Aucune photo</h3><div class="id-status">Ajoutez au moins une photo (chapeau de préférence).</div></div>';
+  var dessous = document.getElementById('f-dessous').value;
+  var anneau = document.getElementById('f-anneau').value;
+  var volve = document.getElementById('f-volve').value;
+  var odeur = document.getElementById('f-odeur').value;
+  var cassure = document.getElementById('f-cassure').value;
+
+  if (!dessous && !volve && !anneau) {
+    resultDiv.innerHTML = '<div class="id-result"><h3>⚠️ Données insuffisantes</h3><div class="id-status">Veuillez renseigner au moins le "Dessous du chapeau" ou la présence d\'une "Volve" pour une analyse.</div></div>';
     return;
   }
 
-  var btn = document.getElementById('btn-infer');
-  btn.disabled = true;
-  btn.textContent = '⏳ Analyse en cours...';
-  resultDiv.innerHTML = '<div class="id-status">Traitement de l\'image par l\'IA...</div>';
+  var deductions = [];
+  var dangerLevel = "low"; // low, medium, high, critical
 
-  try {
-    // Petit délai pour laisser le UI se mettre à jour (évite le gel visuel)
-    await new Promise(r => setTimeout(r, 100));
+  // Règle 1 : Le combo mortel par excellence
+  if (volve.indexOf('Oui') !== -1 && anneau.indexOf('Oui') !== -1) {
+    deductions.push({ name: "AMANITE (Genre Amanita)", detail: "La présence simultanée d'une volve et d'un anneau est le signe distinctif des amanites.", danger: "☠️ RISQUE MORTEL (Syndrome phalloïdien). Ne pas consommer." });
+    dangerLevel = "critical";
+  } else if (volve.indexOf('Oui') !== -1 && dessous === 'Lamelles') {
+    deductions.push({ name: "SUSPICION D'AMANITE", detail: "Toute lamelle avec une volve doit être considérée comme une amanite potentiellement mortelle jusqu'à preuve du contraire.", danger: "☠️ RISQUE MORTEL. À écarter absolument." });
+    dangerLevel = "critical";
+  }
 
-    var img = new Image();
-    await new Promise(function(resolve, reject) {
-      img.onload = resolve;
-      img.onerror = reject;
-      img.src = src;
-    });
+  // Règle 2 : L'agaric qui trompe tout le monde
+  if (dessous === 'Lamelles' && odeur.indexOf('Encre') !== -1 && cassure.indexOf('jaunit') !== -1) {
+    deductions.push({ name: "AGARIC JAUNISSANT (Agaricus xanthodermus)", detail: "Le jaunissement à la base et l'odeur d'encre sont typiques.", danger: "⚠️ TOXIQUE (Provoque de graves vomissements). Très souvent confondu avec le rosé des prés." });
+    dangerLevel = "high";
+  }
 
-    // Prétraitement : resize 299x299, normalisation [-1, 1]
-    var tensor = tf.browser.fromPixels(img)
-      .resizeBilinear([INPUT_SIZE, INPUT_SIZE])
-      .toFloat()
-      .div(127.5)
-      .sub(1)
-      .expandDims(0);
-
-    // Inférence
-    var output = tfliteModel.predict(tensor);
-    var probs = await output.data();
-    
-    // Nettoyage mémoire immédiat (CRUCIAL pour Android)
-    tensor.dispose();
-    output.dispose();
-    if (tf.memory().numTensors > 0) tf.disposeVariables();
-
-    // Top-3
-    var indices = Array.from(probs.keys());
-    indices.sort(function(a, b){ return probs[b] - probs[a]; });
-    var top3 = indices.slice(0, 3);
-    var maxProb = probs[top3[0]];
-
-    var html = '<div class="id-result"><h3>🧠 Résultat (top 3)</h3>';
-    top3.forEach(function(idx, rank) {
-      var name = LABELS[idx] || ('Classe ' + idx);
-      var prob = (probs[idx] * 100).toFixed(1);
-      var isDanger = DANGER_GENERA.some(function(g){ return name.indexOf(g) !== -1; });
-      
-      html += '<div class="id-candidate">';
-      html += '<span class="name">' + (rank + 1) + '. ' + name + '</span>';
-      html += '<span class="prob">' + prob + '%</span>';
-      if (isDanger) html += '<div class="warn">⚠️ Ce genre contient des espèces mortelles — vérifiez impérativement l\'espèce exacte.</div>';
-      html += '</div>';
-    });
-
-    if (maxProb < 0.4) {
-      html += '<div class="id-status">🔍 Confiance faible. Complétez les caractéristiques manuelles.</div>';
-    } else if (maxProb < 0.7) {
-      html += '<div class="id-status">🟡 Confiance modérée. Recoupez avec les critères manuels.</div>';
+  // Règle 3 : Les bolets
+  if (dessous === 'Pores (éponge)') {
+    if (cassure.indexOf('Bleuit') !== -1) {
+      deductions.push({ name: "BOLET (Genre Boletus / Rubroboletus)", detail: "Le bleuissement à la coupure est courant chez les bolets. Certains sont comestibles (Cèpe), d'autres toxiques (Bolet Satan).", danger: "⚠️ PRUDENCE. Nécessite une identification de l'espèce exacte (couleur des pores, du pied)." });
+      dangerLevel = "medium";
     } else {
-      html += '<div class="id-status">🟢 Confiance relativement élevée — mais ne remplace JAMAIS un mycologue.</div>';
+      deductions.push({ name: "BOLET COMESTIBLE POTENTIEL", detail: "Pores sans bleuissement fort. Vérifier qu'il n'a pas de réseau rouge sur le pied.", danger: "✅ POSSIBLEMENT COMESTIBLE, mais vérification obligatoire." });
+      dangerLevel = "low";
     }
-
-    // Recoupement manuel
-    var hints = [];
-    if (document.getElementById('f-volve').value === 'Oui, en sac') hints.push('• Volve en sac → risque Amanita élevé');
-    if (document.getElementById('f-anneau').value.indexOf('Oui') !== -1 && document.getElementById('f-volve').value.indexOf('Oui') !== -1) hints.push('• Anneau + volve → suspicion d\'amanite mortelle');
-    if (document.getElementById('f-odeur').value === 'Phénol / encre') hints.push('• Odeur d\'encre → penser à Agaricus xanthodermus');
-    
-    if (hints.length) {
-      html += '<div class="id-status" style="margin-top:12px; border-top:1px solid #3a5a3a; padding-top:8px;"><strong>🔗 Recoupement manuel :</strong><br>' + hints.join('<br>') + '</div>';
-    }
-
-    html += '<div class="id-status" style="color:#fca5a5; margin-top:12px; font-weight:600;">⚠️ Ne consommez JAMAIS sur la base de ce résultat.</div>';
-    html += '</div>';
-    resultDiv.innerHTML = html;
-
-  } catch(e) {
-    console.error(e);
-    resultDiv.innerHTML = '<div class="id-result"><h3>❌ Erreur d\'analyse</h3><div class="id-status">' + e.message + '</div></div>';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '🧠 Reconnaître l\'espèce (IA locale)';
-  }
-}
-
-// ==================== Mode Démo (Fallback) ====================
-function runDemoInference() {
-  var resultDiv = document.getElementById('ai-result');
-  var btn = document.getElementById('btn-infer');
-  var src = photos.chapeau || photos.dessous || photos.pied;
-  
-  if (!src) {
-    resultDiv.innerHTML = '<div class="id-result"><h3>📷 Aucune photo</h3><div class="id-status">Ajoutez une photo pour tester l\'interface.</div></div>';
-    return;
   }
 
-  btn.disabled = true;
-  btn.textContent = '⏳ Simulation...';
-  
-  setTimeout(() => {
-    // Simulation de résultats réalistes pour tester l'UI
-    var mockProbs = [0.65, 0.20, 0.10, 0.03, 0.01, 0.01, 0.0, 0.0, 0.0];
-    var html = '<div class="id-result"><h3>🧠 Résultat (Mode Démo)</h3>';
-    html += '<div class="id-status" style="color:#fdba74; margin-bottom:10px; font-weight:600;">⚠️ Ceci est une simulation. Le modèle IA n\'a pas pu être chargé (vérifiez le fichier .tflite dans les assets).</div>';
-    
-    var top3 = [0, 1, 3]; // Agaricus, Amanita, Cortinarius
-    top3.forEach(function(idx, rank) {
-      var name = LABELS[idx];
-      var prob = (mockProbs[idx] * 100).toFixed(1);
-      var isDanger = DANGER_GENERA.some(function(g){ return name.indexOf(g) !== -1; });
-      
-      html += '<div class="id-candidate">';
-      html += '<span class="name">' + (rank + 1) + '. ' + name + '</span>';
-      html += '<span class="prob">' + prob + '%</span>';
-      if (isDanger) html += '<div class="warn">⚠️ Ce genre contient des espèces mortelles.</div>';
-      html += '</div>';
-    });
-    
-    html += '<div class="id-status" style="color:#fca5a5; margin-top:12px; font-weight:600;">⚠️ Ne consommez JAMAIS sur la base de ce résultat.</div>';
+  // Règle 4 : Les girolles vs clitocybes de l'olivier
+  if (dessous === 'Plis' && odeur.indexOf('Fétide') !== -1) {
+    deductions.push({ name: "CLITOCYBE DE L'OLIVIER (Omphalotus olearius)", detail: "Pousse en touffes sur le bois, odeur désagréable, faux plis.", danger: "⚠️ TOXIQUE. Ne pas confondre avec la girolle (qui pousse au sol et sent la pêche/abricot)." });
+    dangerLevel = "high";
+  } else if (dessous === 'Plis' && odeur.indexOf('Aucune') !== -1) {
+    deductions.push({ name: "GIROLLE POTENTIELLE (Cantharellus)", detail: "Vérifier qu'elle pousse au sol (pas sur bois) et sent légèrement l'abricot.", danger: "✅ POSSIBLEMENT COMESTIBLE, mais vérification obligatoire." });
+    dangerLevel = "low";
+  }
+
+  // Règle 5 : Sur bois mort
+  if (dessous === 'Lamelles' && document.getElementById('f-lieu').value.toLowerCase().indexOf('bois') !== -1) {
+    deductions.push({ name: "SUSPICION GALÈRE ou HYPHOLOME", detail: "De nombreux champignons toxiques poussent sur le bois mort (Galère marginée = mortelle, Hypholome = toxique).", danger: "⚠️ PRUDENCE EXTRÊME. Les champignons sur bois sont souvent dangereux." });
+    dangerLevel = "high";
+  }
+
+  // Résultat par défaut si aucune règle spécifique ne s'applique
+  if (deductions.length === 0) {
+    deductions.push({ name: "IDENTIFICATION INCONCLUE", detail: "Les critères fournis ne permettent pas de cibler un genre spécifique. Le règne fongique est trop vaste.", danger: "⚠️ NE PAS CONSOMMER. Prenez des photos et montrez-les à un pharmacien." });
+    dangerLevel = "medium";
+  }
+
+  // Génération du HTML
+  var html = '<div class="id-result"><h3>🧠 Analyse Mycologique</h3>';
+  deductions.forEach(function(d) {
+    var dangerClass = d.danger.includes('MORTEL') ? 'danger' : (d.danger.includes('TOXIQUE') ? 'danger' : 'safe');
+    html += '<div class="deduction-item">';
+    html += '<div class="name">' + d.name + '</div>';
+    html += '<div style="font-size:12px; color:#a8c4a8; margin:4px 0;">' + d.detail + '</div>';
+    html += '<div class="' + dangerClass + '">' + d.danger + '</div>';
     html += '</div>';
-    resultDiv.innerHTML = html;
-    
-    btn.disabled = false;
-    btn.textContent = '🧠 Reconnaître l\'espèce (IA locale)';
-  }, 800);
+  });
+  
+  html += '<div class="id-status" style="color:#fca5a5; margin-top:12px; font-weight:600; border-top:1px solid #3a5a3a; padding-top:10px;">⚠️ RAPPEL : Cette analyse est basée sur des règles générales. Elle ne remplace JAMAIS l\'expertise humaine d\'un mycologue.</div>';
+  html += '</div>';
+  
+  resultDiv.innerHTML = html;
+  resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // ==================== Gestion des données ====================
-var dangerOpen = false;
-function toggleDanger() {
-  dangerOpen = !dangerOpen;
-  var list = document.getElementById('danger-list');
-  var btn = document.getElementById('btn-danger');
-  if (dangerOpen) { list.classList.remove('hidden'); btn.textContent = '📖 Masquer les espèces'; }
-  else { list.classList.add('hidden'); btn.textContent = '📖 Afficher les 15 espèces'; }
-}
-
-var observations = [];
 try { observations = JSON.parse(localStorage.getItem('obs_data')) || []; } catch(e) { observations = []; }
 
 function saveObs() { 
   try { localStorage.setItem('obs_data', JSON.stringify(observations)); } 
-  catch(e) { alert("Mémoire de stockage pleine. Veuillez effacer les anciennes observations."); } 
+  catch(e) { alert("Mémoire pleine. Veuillez effacer les anciennes observations."); } 
 }
 
 function esc(s) { return String(s || '').replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
@@ -475,21 +285,17 @@ function saveObservation() {
     id: 'OBS-' + Date.now(),
     date: new Date().toLocaleString('fr-FR'),
     lieu: document.getElementById('f-lieu').value.trim(),
-    couleurChapeau: document.getElementById('f-couleur-chapeau').value,
-    formeChapeau: document.getElementById('f-forme-chapeau').value,
     dessous: document.getElementById('f-dessous').value,
     anneau: document.getElementById('f-anneau').value,
     volve: document.getElementById('f-volve').value,
     odeur: document.getElementById('f-odeur').value,
     cassure: document.getElementById('f-cassure').value,
     notes: document.getElementById('f-notes').value.trim(),
-    // Optimisation : on ne sauvegarde PAS les images base64 dans localStorage pour éviter les crashs (QuotaExceededError)
-    // On garde juste un indicateur visuel
     hasPhotos: (photos.chapeau || photos.pied || photos.dessous) ? true : false
   };
   
-  if (!obs.lieu && !obs.notes && !obs.couleurChapeau) { 
-    alert("Remplissez au moins quelques caractéristiques (lieu, couleur, etc.)."); 
+  if (!obs.lieu && !obs.dessous && !obs.notes) { 
+    alert("Veuillez renseigner au moins le lieu ou une caractéristique (ex: dessous du chapeau)."); 
     return; 
   }
   
@@ -497,13 +303,13 @@ function saveObservation() {
   saveObs(); 
   resetForm(); 
   render();
-  alert('✅ Observation enregistrée.\n\n⚠️ Rappel : ne consommez JAMAIS sans validation par un mycologue.');
+  alert('✅ Observation enregistrée.\n\n⚠️ Pensez à la faire valider par un pharmacien !');
 }
 
 function resetForm() {
-  var fields = ['f-lieu','f-couleur-chapeau','f-forme-chapeau','f-dessous','f-anneau','f-volve','f-odeur','f-cassure','f-notes'];
+  var fields = ['f-lieu','f-dessous','f-anneau','f-volve','f-odeur','f-cassure','f-notes'];
   for (var i = 0; i < fields.length; i++) document.getElementById(fields[i]).value = '';
-  var checks = ['c1','c2','c3','c4'];
+  var checks = ['c1','c2','c3'];
   for (var j = 0; j < checks.length; j++) document.getElementById(checks[j]).checked = false;
   
   var types = ['chapeau','pied','dessous'];
@@ -532,75 +338,20 @@ function render() {
   }
   el.innerHTML = observations.slice().reverse().map(function(o) {
     var traits = [
-      o.couleurChapeau && ('Chapeau : ' + esc(o.couleurChapeau)),
-      o.formeChapeau && ('Forme : ' + esc(o.formeChapeau)),
       o.dessous && ('Dessous : ' + esc(o.dessous)),
-      o.anneau && ('Anneau : ' + esc(o.anneau)),
       o.volve && ('Volve : ' + esc(o.volve)),
-      o.odeur && ('Odeur : ' + esc(o.odeur)),
-      o.cassure && ('Cassure : ' + esc(o.cassure))
+      o.anneau && ('Anneau : ' + esc(o.anneau)),
+      o.odeur && ('Odeur : ' + esc(o.odeur))
     ].filter(Boolean);
     
-    var photosHtml = o.hasPhotos ? '<div style="margin-top:8px; display:flex; gap:6px;"><span style="font-size:11px; color:#86efac; align-self:center;">📷 Photos prises</span></div>' : '';
+    var photosHtml = o.hasPhotos ? '<div style="margin-top:8px; display:flex; gap:6px;"><span style="font-size:11px; color:#86efac; align-self:center;">📷 Photos jointes</span></div>' : '';
     
     return '<div class="entry"><strong>' + esc(o.date) + '</strong>' + (o.lieu ? ' — ' + esc(o.lieu) : '') + (traits.length ? '<div style="margin-top:6px; line-height:1.4;">' + traits.join(' · ') + '</div>' : '') + (o.notes ? '<div style="margin-top:6px; font-style:italic; color:#a8c4a8;">« ' + esc(o.notes) + ' »</div>' : '') + photosHtml + '</div>';
   }).join('');
 }
 
-// ==================== Quiz ====================
-var QUIZ_QUESTIONS = [
-  { question: "Chapeau brun + lamelles blanches + anneau + volve en sac. Que faites-vous ?", choices: ["Je le cueille : c'est un rosé des prés", "Je le laisse : suspicion d'amanite mortelle", "Je le goûte pour vérifier", "Je le prends pour le montrer"], correct: 1, feedback: "Cette combinaison est classique des amanites mortelles." },
-  { question: "Le pied jaunit à la base quand on le froisse, odeur d'encre. De quoi s'agit-il ?", choices: ["D'un rosé des prés", "D'un agaric jaunissant, toxique", "D'une girolle", "D'un cèpe"], correct: 1, feedback: "L'agaric jaunissant est l'espèce toxique la plus confondue avec le rosé des prés." },
-  { question: "Quelle est la règle absolue avant de consommer ?", choices: ["Laver à l'eau vinaigrée", "Cuire très longtemps", "Validation par un mycologue ou pharmacie mycologique", "Vérifier sur une application"], correct: 2, feedback: "Seule la validation par un mycologue est fiable." },
-  { question: "Une fausse morille après séchage/cuisson est-elle comestible ?", choices: ["Oui, si bien séchée", "Oui, si bouillie 30 min", "Non, le risque persiste", "Oui, en petite quantité"], correct: 2, feedback: "La gyromitrine résiste au séchage et à la cuisson." },
-  { question: "Touffes sur souche, lamelles jaune-vert, saveur amère. Que faire ?", choices: ["Le cuisiner : armillaire", "Le laisser : suspicion d'hypholome", "Le goûter cru", "Le donner à un animal"], correct: 1, feedback: "L'hypholome en touffes est toxique." },
-  { question: "Blanc en prairie, sans anneau ni volve, odeur douce. Réflexe ?", choices: ["Comestible", "Je le mange après cuisson", "Méfiance : clitocybes blancs possibles, faire vérifier", "Je le jette"], correct: 2, feedback: "Le clitocybe blanc ressemble au mousseron. Aucun critère isolé ne suffit." }
-];
-var quizAnswers = {};
-var quizDone = {};
-
-function renderQuiz() {
-  var list = document.getElementById('quiz-list'); if (!list) return;
-  list.innerHTML = QUIZ_QUESTIONS.map(function(q, i) {
-    var answered = quizDone[i]; var selected = quizAnswers[i];
-    var choicesHtml = q.choices.map(function(c, j) {
-      var cls = 'quiz-choice';
-      if (answered) { if (j === q.correct) cls += ' correct'; else if (j === selected) cls += ' wrong'; }
-      var disabled = answered ? ' disabled' : '';
-      var onclick = answered ? '' : ' onclick="answerQuiz(' + i + ',' + j + ')"';
-      return '<button class="' + cls + '"' + disabled + onclick + '>' + esc(c) + '</button>';
-    }).join('');
-    return '<div class="quiz-card"><h3>' + (i + 1) + '. ' + esc(q.question) + '</h3>' + choicesHtml + (answered ? '<div class="quiz-feedback">💡 ' + esc(q.feedback) + '</div>' : '') + '</div>';
-  }).join('');
-}
-
-function answerQuiz(qIndex, choiceIndex) {
-  if (quizDone[qIndex]) return;
-  quizAnswers[qIndex] = choiceIndex; quizDone[qIndex] = true;
-  renderQuiz(); updateQuizScore();
-}
-
-function updateQuizScore() {
-  var el = document.getElementById('quiz-score'); if (!el) return;
-  var answeredCount = Object.keys(quizDone).length; var good = 0;
-  for (var k in quizDone) if (quizAnswers[k] === QUIZ_QUESTIONS[k].correct) good++;
-  el.textContent = 'Score : ' + good + ' / ' + QUIZ_QUESTIONS.length + (answeredCount < QUIZ_QUESTIONS.length ? ' (' + answeredCount + ' répondue' + (answeredCount > 1 ? 's' : '') + ')' : ' — terminé !');
-}
-
-function toggleQuiz() {
-  var content = document.getElementById('quiz-content');
-  var btn = document.getElementById('btn-quiz');
-  if (!content || !btn) return;
-  var isHidden = content.classList.contains('hidden');
-  if (isHidden) { content.classList.remove('hidden'); btn.textContent = '📖 Masquer le quiz'; renderQuiz(); updateQuizScore(); }
-  else { content.classList.add('hidden'); btn.textContent = '📖 Afficher le quiz'; }
-}
-
-function resetQuiz() { quizAnswers = {}; quizDone = {}; renderQuiz(); updateQuizScore(); }
-
 // Initialisation
 render();
-loadModel();
 </script>
 </body>
 </html>
